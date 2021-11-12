@@ -1,17 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import { store } from './app/store';
+import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
+import CssBaseline from '@material-ui/core/CssBaseline';
+
+import './index.css';
+import rootReducer from './reducers';
+import App from './App';
+
+
 import * as serviceWorker from './serviceWorker';
 
+const store = configureStore({
+  reducer: rootReducer
+});
+
+// removed React.StrictMode from empty diamond brackets to prevent MUI from
+// tripping errors in the console. Should be fixed when MUI gets updated
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <CssBaseline />
+    <App />
+  </Provider>,
   document.getElementById('root')
 );
 
