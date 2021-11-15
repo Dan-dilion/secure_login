@@ -30,12 +30,11 @@ export const Header = (props) => {
         <Toolbar className={classes.toolbarStyle}>
 
           <div className={classes.titleStyle}>
-            <Typography variant='h4'>S</Typography>
+            <Typography variant='h4'>JWT</Typography>
+            <Typography variant='h4'>&nbsp;S</Typography>
             <Typography variant='h6'>mart</Typography>
-            <Typography variant='h4'>&nbsp;I</Typography>
-            <Typography variant='h6'>nventory</Typography>
-            <Typography variant='h4'>&nbsp;M</Typography>
-            <Typography variant='h6'>anagement</Typography>
+            <Typography variant='h4'>&nbsp;L</Typography>
+            <Typography variant='h6'>ogin</Typography>
             <Typography variant='h4'>&nbsp;S</Typography>
             <Typography variant='h6'>ystem</Typography>
           </div>

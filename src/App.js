@@ -1,15 +1,12 @@
 import React from 'react';
 import {
-  BrowserRouter as Router,
   Route,
-  Switch,
-  Redirect
+  Routes,
+  Navigate
 } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { MuiThemeProvider } from '@material-ui/core/styles';
-import { theme } from './MuiTheme.js';
-import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute.js';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.js';
 import { Header } from './components/Header/Header.js';
 import { Body } from './pages/Body/Body.js';
 import { Login } from './pages/Login/Login.js';
@@ -80,53 +77,66 @@ class App extends React.Component {
     if (savedUser) verifyUser(savedUser.token, (result) => this.props.setVerifiedToken(result));
 
     return (
-      <MuiThemeProvider theme={theme}>
-        <Router basename = {process.env.PUBLIC_URL}>
+      <>
+        { this.props.loggedIn.verified ? (<Header verifiedLogin = { this.props.loggedIn.verified } />) : null }
 
-          { this.props.loggedIn.verified ? (<Redirect to="/" />) : null }
-          { this.props.loggedIn.verified ? (<Header verifiedLogin = { this.props.loggedIn.verified } />) : null }
+        <Routes>
 
-          <div className="app">
-            <Switch onChange={ () => { console.log('Route Changed!'); } }>
-
+          <Route
+            exact path={'/'}
+            element={
               <ProtectedRoute
-                exact path={'/'}
-                component={Home}
                 user={this.props.loggedIn}
                 setVerified={ (newStatus) => this.props.setVerifiedToken(newStatus) }
-              />
-
-              <ProtectedRoute
                 path={'/Home'}
-                component={Home}
-                user={this.props.loggedIn}
-                setVerified={ (newStatus) => this.props.setVerifiedToken(newStatus) }
-              />
+              >
+                <Home />
+              </ProtectedRoute>
+            }
+          />
 
+          <Route
+            path={'/Home'}
+            element={
               <ProtectedRoute
-                path={'/Users'}
-                component={Body}
                 user={this.props.loggedIn}
                 setVerified={ (newStatus) => this.props.setVerifiedToken(newStatus) }
-                query = {query}
-                sqlResults = {this.state.sqlResults}
-                loggedIn={this.props.loggedIn}
-                setVerify = { newStatus => this.props.setVerifiedToken(newStatus) }
-                setSqlResults = { results => this.setResults(results) }
-              />
+                path={'/Home'}
+              >
+                <Home />
+              </ProtectedRoute>
+            }
+          />
 
-              <Route
-                path={'/Login'}
-                render = { props => <Login
-                  storeToken = { newUser => this.props.setLoggedIn(newUser) }
-                /> }
-              />
+          <Route
+            path={'/Users'}
+            element={
+              <ProtectedRoute
+                user={this.props.loggedIn}
+                setVerified={ (newStatus) => this.props.setVerifiedToken(newStatus) }
+                path={'/Users'}
+              >
+                <Body
+                  query = {query}
+                  sqlResults = {this.state.sqlResults}
+                  loggedIn={this.props.loggedIn}
+                  setVerify = { newStatus => this.props.setVerifiedToken(newStatus) }
+                  setSqlResults = { results => this.setResults(results) }
+                />
+              </ProtectedRoute>
+            }
+          />
 
-            </Switch>
-          </div>
+          <Route
+            path={'/Login'}
+            element = {
+              <Login storeToken = { newUser => this.props.setLoggedIn(newUser) } />
+            }
+          />
 
-        </Router>
-      </MuiThemeProvider>
+        </Routes>
+
+      </>
     );
   }
 }

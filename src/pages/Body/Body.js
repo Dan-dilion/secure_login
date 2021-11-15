@@ -7,7 +7,11 @@ import { RenderTable } from '../../components/RenderTable/RenderTable.js';
 import './Body.css';
 
 export const Body = props => {
-  const { pressMeButton } = BodyLogic(props);
+  // Destructure logic
+  const {
+    sqlResults,
+    pressMeButton
+  } = BodyLogic(props);
 
   return (
     <div className="results_wrapper">
@@ -16,7 +20,7 @@ export const Body = props => {
       </div>
       <div>
         <center>
-          <label style={{ color: 'whitesmoke' }}>JWT: - </label>
+          <label style={{ color: 'black' }}>JWT: - </label>
           <input
             className="jwt"
             type="text"

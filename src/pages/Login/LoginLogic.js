@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 import bcrypt from 'bcryptjs';
 
 import { requestLogin } from '../../server_requests/securityRequests.js';
 
 const LoginLogic = (props) => {
 
+  const { state } = useLocation();
+  let navigate = useNavigate();
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [hash, setHash] = useState('');
@@ -29,6 +32,8 @@ const LoginLogic = (props) => {
       });
       console.log('loginAction Success: ', results.msg);
       console.log('\nNew token: ', results.token);
+      console.log('Location State: ', state);
+      navigate(state.path || '/Body');
     } else {
       console.log('loginAction Fail: ', results.msg);
     }

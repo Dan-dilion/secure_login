@@ -1,40 +1,25 @@
-import React, { useEffect } from 'react';
-import { Route, Redirect } from 'react-router-dom';
-import propTypes from 'prop-types';
+import { useEffect } from 'react';
+import { Navigate } from 'react-router-dom'
+
 import { verifyUser } from '../../server_requests/securityRequests.js';
 
-export const ProtectedRoute = ({ component: Component, user, setVerified, ...rest }) => {
+const ProtectedRoute = ({ user, setVerified, children, path = '/Home' }) => {
 
-  // The if statement in the varifyUser callback prevents re-render if token validity has not changed
   useEffect(() => {
-    verifyUser(user.jwt, (newStatus) => { if (user.verified !== newStatus) { setVerified(newStatus); } });
+    verifyUser(user.jwt, (newStatus) => {
+      if (user.verified !== newStatus) { setVerified(newStatus); }
+    });
   });
 
-  return (
-    <Route {...rest} render = {
-      props => {
-        if (user.verified) {
-          return (<Component {...rest} {...props} />);
-        } else {
-          return (
-            <Redirect to={{
-              pathname: '/LogIn',
-              state: {
-                from: props.location
-              }
-            }} />
-          );
-        }
-      }
-    } />
-  );
-};
+  console.log('Protected Route: ', user);
 
-ProtectedRoute.propTypes = {
-  component: propTypes.func,
-  user: propTypes.object,
-  setVerified: propTypes.func,
-  location: propTypes.object
-};
+  const verifiedElement = user.verified
+    ? children
+    : <Navigate to="/Login" state={{ path }} />
 
-// export default ProtectedRoute;
+  // return <Route path={path} element={<Navigate to="/Login" replace />} />
+  return verifiedElement
+
+}
+
+export default ProtectedRoute

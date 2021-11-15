@@ -1,10 +1,10 @@
 import { queryDatabase } from '../../server_requests/queryDatabase.js';
 
-const BodyLogic = (props) => {
+const BodyLogic = ({query, sqlResults, loggedIn, setVerify, setSqlResults}) => {
 
   const pressMeCallBack = results => {
     if (results.verified) {
-      props.setSqlResults(results.results);
+      setSqlResults(results.results);
     } else {
       console.log(results.msg);
       // history.push('/login');
@@ -12,15 +12,18 @@ const BodyLogic = (props) => {
       //   ...props.loggedIn,
       //   verified: results.verified
       // });
-      props.setVerify(results.verified);
+      setVerify(results.verified);
     }
   };
 
   const pressMeButton = results => {
-    queryDatabase(props.query, props.loggedIn.jwt, results => pressMeCallBack(results));
+    queryDatabase(query, loggedIn.jwt, results => pressMeCallBack(results));
   };
 
-  return { pressMeButton };
+  return {
+    sqlResults,
+    pressMeButton
+  };
 };
 
 export default BodyLogic;
