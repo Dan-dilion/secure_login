@@ -11,7 +11,6 @@ import {
 
 import LoginLogic from './LoginLogic.js';   // Page logic
 import useStyles from './LoginStyle.js';    // Page MUI style
-import './Login.css';
 
 export const Login = props => {
 

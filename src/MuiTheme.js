@@ -1,8 +1,8 @@
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createTheme } from '@material-ui/core/styles';
 import { purple, deepPurple } from '@material-ui/core/colors';
 
 // See the complete theme object here: https://material-ui.com/customization/default-theme/
-export const theme = createMuiTheme({
+export const theme = createTheme({
   palette: {                              // Find colour objects here: https://material-ui.com/customization/color/#color-palette
     // primary: {
     //   light: '#d1c4e9',

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import BodyLogic from './BodyLogic.js';
-import { RenderTable } from '../../components/RenderTable/RenderTable.js';
+import { RenderTable } from '../../globalComponents/RenderTable/RenderTable.js';
 
 import './Body.css';
 

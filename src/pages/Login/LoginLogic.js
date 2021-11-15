@@ -4,10 +4,10 @@ import bcrypt from 'bcryptjs';
 
 import { requestLogin } from '../../server_requests/securityRequests.js';
 
-const LoginLogic = (props) => {
+const LoginLogic = ({ returnPath, storeToken, setLoginModalVisible }) => {
 
   const { state } = useLocation();
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [hash, setHash] = useState('');
@@ -24,8 +24,7 @@ const LoginLogic = (props) => {
 
   const loginAction = (results) => {
     if (results.loginSuccess) {
-      // props.storeToken({
-      props.storeToken({
+      storeToken({
         verified: results.loginSuccess,
         jwt: results.token,
         user: results.user
@@ -33,6 +32,7 @@ const LoginLogic = (props) => {
       console.log('loginAction Success: ', results.msg);
       console.log('\nNew token: ', results.token);
       console.log('Location State: ', state);
+      setLoginModalVisible(false);
       navigate(state.path || '/Body');
     } else {
       console.log('loginAction Fail: ', results.msg);

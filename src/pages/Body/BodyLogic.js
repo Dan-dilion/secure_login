@@ -1,6 +1,6 @@
 import { queryDatabase } from '../../server_requests/queryDatabase.js';
 
-const BodyLogic = ({query, sqlResults, loggedIn, setVerify, setSqlResults}) => {
+const BodyLogic = ({ query, sqlResults, loggedIn, setVerify, setSqlResults }) => {
 
   const pressMeCallBack = results => {
     if (results.verified) {
