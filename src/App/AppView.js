@@ -21,39 +21,26 @@ import { About } from '../pages/About';
 
 const AppView = props => {
   const {
-    state,
-    loggedIn,
-    setLoggedIn,
-    setVerifiedToken,
-    setHeaderUnderline,
+    loginModal,
     setLoginModalVisible,
-    setResults,
     query
   } = props;
 
   return (
     <>
-      <Header
-          verifiedLogin = { loggedIn.verified }
-          headerSelection = { state.headerSelection }
-          setHeaderUnderline = { setHeaderUnderline }
-      />
+      <Header />
 
       <Card elevation={0}>
         <Modal
-          open={state.loginModal.Visible}
-          onClose={() => setLoginModalVisible(false)}
+          open={loginModal.visible}
+          onClose={ () => setLoginModalVisible({ visible: false, returnPath: loginModal.returnPath }) }
           closeAfterTransition
           BackdropComponent={Backdrop}
           BackdropProps={{ timeout: 500 }}
         >
-          <Zoom in={state.loginModal.Visible}>
+          <Zoom in={loginModal.visible}>
             <Card variant="elevated">
-              <Login
-                returnPath = { state.loginModal.returnPath }
-                storeToken = { newUser => setLoggedIn(newUser) }
-                setLoginModalVisible = { setLoginModalVisible }
-              />
+              <Login />
             </Card>
           </Zoom>
         </Modal>
@@ -80,17 +67,10 @@ const AppView = props => {
           path={'/Private'}
           element={
             <ProtectedRoute
-              user={loggedIn}
-              setVerified={ (newStatus) => setVerifiedToken(newStatus) }
-              setLoginModalVisible={setLoginModalVisible}
               path={'/Private'}
             >
               <Body
                 query = { query }
-                sqlResults = { state.sqlResults }
-                loggedIn={ loggedIn }
-                setVerify = { newStatus => setVerifiedToken(newStatus) }
-                setSqlResults = { results => setResults(results) }
               />
             </ProtectedRoute>
           }
@@ -99,10 +79,7 @@ const AppView = props => {
         <Route
           path={'/LoginPrompt'}
           element = {
-            <LoginPrompt
-              setLoginModalVisible={ setLoginModalVisible }
-              storeToken = { newUser => setLoggedIn(newUser) }
-            />
+            <LoginPrompt />
           }
         />
 
@@ -113,13 +90,8 @@ const AppView = props => {
 };
 
 AppView.propTypes = {
-  state: PropTypes.object.isRequired,
-  loggedIn: PropTypes.object.isRequired,
-  setVerifiedToken: PropTypes.func.isRequired,
-  setLoggedIn: PropTypes.func.isRequired,
-  setHeaderUnderline: PropTypes.func.isRequired,
+  loginModal: PropTypes.object,
   setLoginModalVisible: PropTypes.func.isRequired,
-  setResults: PropTypes.func.isRequired,
   query: PropTypes.string
 };
 

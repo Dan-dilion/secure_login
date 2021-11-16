@@ -7,7 +7,14 @@ import {
   Tabs,
   Tab
 } from '@material-ui/core';
-import { Info as InfoIcon, Lock as LockIcon, LockOpen as LockOpenIcon, Home as HomeIcon } from '@material-ui/icons';
+import {
+  Info as InfoIcon,
+  Lock as LockIcon,
+  LockOpen as LockOpenIcon,
+  Home as HomeIcon
+} from '@material-ui/icons';
+
+
 import HeaderLogic from './HeaderLogic.js';
 
 const Header = (props) => {

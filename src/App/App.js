@@ -6,7 +6,10 @@ import PropTypes from 'prop-types';
 
 import AppView from './AppView.js';
 
-import { setLoggedIn, setVerifiedToken } from '../pages/Login/loginSlice.js';
+import { setVerifiedToken } from '../pages/Login/loginSlice.js';
+import {
+  setLoginModalVisible
+} from './AppSlice.js';
 import { verifyUser } from '../server_requests/securityRequests.js';
 
 
@@ -45,14 +48,14 @@ import { verifyUser } from '../server_requests/securityRequests.js';
 //   return user;
 // };
 
-const defaultState = {
-  sqlResults: [],
-  headerSelection: 0,
-  loginModal: {
-    Visible: false,
-    returnPath: '/Home'
-  }
-};
+// const defaultState = {
+//   sqlResults: [],
+//   headerSelection: 0,
+//   loginModal: {
+//     visible: false,
+//     returnPath: '/Home'
+//   }
+// };
 
 const query = 'SELECT id, username, password, email FROM node_login.users';
 
@@ -60,41 +63,42 @@ class App extends React.Component {
   constructor() {
     super();
 
-    this.state = defaultState;
+    // this.state = defaultState;
+    this.state = {};
   }
 
-  setResults = (results) => {
-    this.setState({
-      sqlResults: results
-    });
-  }
+  // setResults = (results) => {
+  //   this.setState({
+  //     sqlResults: results
+  //   });
+  // }
 
-  setHeaderUnderline = (routeName, delay = false) => {
-    const imposeDelay = (callback) => {
-      setTimeout(() => {
-        callback();
-      }, (delay ? 2500 : 0));
-    };
+  // setHeaderUnderline = (routeName, delay = false) => {
+  //   const imposeDelay = (callback) => {
+  //     setTimeout(() => {
+  //       callback();
+  //     }, (delay ? 2500 : 0));
+  //   };
+  //
+  //   if (delay) this.setState({ headerSelection: null });
+  //
+  //   switch (routeName) {
+  //     case 'home':
+  //     case 'Home':
+  //     case '': imposeDelay(() => this.setState({ headerSelection: 0 })); break;
+  //     case 'about':
+  //     case 'About': imposeDelay(() => this.setState({ headerSelection: 1 })); break;
+  //     case 'private':
+  //     case 'Private': imposeDelay(() => this.setState({ headerSelection: 2 })); break;
+  //     default: break;
+  //   }
+  // };
 
-    if (delay) this.setState({ headerSelection: null });
-
-    switch (routeName) {
-      case 'home':
-      case 'Home':
-      case '': imposeDelay(() => this.setState({ headerSelection: 0 })); break;
-      case 'about':
-      case 'About': imposeDelay(() => this.setState({ headerSelection: 1 })); break;
-      case 'private':
-      case 'Private': imposeDelay(() => this.setState({ headerSelection: 2 })); break;
-      default: break;
-    }
-  };
-
-  setLoginModalVisible = (newState, returnPath = '/Home') => {
-    this.setState({
-      loginModal: { Visible: newState, returnPath: returnPath }
-    });
-  }
+  // setLoginModalVisible = (newState, returnPath = '/Home') => {
+  //   this.setState({
+  //     loginModal: { visible: newState, returnPath: returnPath }
+  //   });
+  // }
 
   render() {
 
@@ -102,15 +106,12 @@ class App extends React.Component {
     const savedUser = JSON.parse(localStorage.getItem('ACCESS_TOKEN'));
     if (savedUser) verifyUser(savedUser.token, (result) => this.props.setVerifiedToken(result));
 
+    console.log('App here - props: ', this.props);
+
     return (
       <AppView
-        state={this.state}
-        loggedIn={this.props.loggedIn}
-        setLoggedIn={this.props.setLoggedIn}
-        setVerifiedToken={this.props.setVerifiedToken}
-        setHeaderUnderline={this.setHeaderUnderline}
-        setLoginModalVisible={this.setLoginModalVisible}
-        setResults={this.setResults}
+        loginModal={this.props.loginModal}
+        setLoginModalVisible={this.props.setLoginModalVisible}
         query={query}
       />
     );
@@ -118,18 +119,21 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  loggedIn: PropTypes.object,
+  loginModal: PropTypes.object.isRequired,
   setVerifiedToken: PropTypes.func,
-  setLoggedIn: PropTypes.func
+  setLoginModalVisible: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
   return {
-    loggedIn: state.login.loggedIn
+    loginModal: state.app.loginModal
   };
 };
 
-const mapDispatchToProps = { setLoggedIn, setVerifiedToken };
+const mapDispatchToProps = {
+  setVerifiedToken,
+  setLoginModalVisible
+};
 
 export default connect(
   mapStateToProps,

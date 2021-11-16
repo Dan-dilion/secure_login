@@ -1,13 +1,18 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
+import { useSelector, useDispatch } from 'react-redux';
 import bcrypt from 'bcryptjs';
 
+import { setLoginModalVisible } from '../../App/AppSlice.js';
+import { setLoggedIn } from './loginSlice.js';
 import { requestLogin } from '../../server_requests/securityRequests.js';
 
-const LoginLogic = ({ returnPath, storeToken, setLoginModalVisible }) => {
+const LoginLogic = () => {
 
   const { state } = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  // const returnPath = useSelector(state => state.app.loginModal.returnPath)
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [hash, setHash] = useState('');
@@ -24,15 +29,15 @@ const LoginLogic = ({ returnPath, storeToken, setLoginModalVisible }) => {
 
   const loginAction = (results) => {
     if (results.loginSuccess) {
-      storeToken({
+      dispatch(setLoggedIn({
         verified: results.loginSuccess,
         jwt: results.token,
         user: results.user
-      });
+      }));
       console.log('loginAction Success: ', results.msg);
       console.log('\nNew token: ', results.token);
       console.log('Location State: ', state);
-      setLoginModalVisible(false);
+      dispatch(setLoginModalVisible({ visible: false, returnPath: state.path }));
       navigate(state.path || '/Body');
     } else {
       console.log('loginAction Fail: ', results.msg);
