@@ -4,6 +4,7 @@ const BodyLogic = ({ query, sqlResults, loggedIn, setVerify, setSqlResults }) =>
 
   const pressMeCallBack = results => {
     if (results.verified) {
+      // console.log('BodyLogic PressMeCallback Here: ', results);
       setSqlResults(results.results);
     } else {
       console.log(results.msg);
@@ -22,6 +23,7 @@ const BodyLogic = ({ query, sqlResults, loggedIn, setVerify, setSqlResults }) =>
 
   return {
     sqlResults,
+    loggedIn,
     pressMeButton
   };
 };

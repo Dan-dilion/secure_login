@@ -10,6 +10,7 @@ export const Body = props => {
   // Destructure logic
   const {
     sqlResults,
+    loggedIn,
     pressMeButton
   } = BodyLogic(props);
 
@@ -24,7 +25,7 @@ export const Body = props => {
           <input
             className="jwt"
             type="text"
-            value={ props.jwt }
+            value={ loggedIn.jwt }
             disabled
           />
         </center>
@@ -32,7 +33,7 @@ export const Body = props => {
       <div className="table_wrapper">
         <h3>Results: </h3>
         <div className="results">
-          { RenderTable(props.sqlResults) }
+          { RenderTable(sqlResults) }
         </div>
       </div>
     </div>
