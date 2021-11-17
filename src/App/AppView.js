@@ -35,11 +35,11 @@ const AppView = props => {
           open={loginModal.visible}
           onClose={ () => setLoginModalVisible({ visible: false, returnPath: loginModal.returnPath }) }
           closeAfterTransition
-          BackdropComponent={Backdrop}
+          BackdropComponent={ Backdrop }
           BackdropProps={{ timeout: 500 }}
         >
           <Zoom in={loginModal.visible}>
-            <Card variant="elevated">
+            <Card variant="elevation">
               <Login />
             </Card>
           </Zoom>

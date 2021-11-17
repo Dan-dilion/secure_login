@@ -21,7 +21,7 @@ export const requestLogin = (userName, password, callBack) => {
 
 // Verify User
 export const verifyUser = (token, callBack) => {
-  console.log('verifying User...');
+  console.log('SecurityRequests.js - verifying User...');
 
   if (token) {
     fetch('http://localhost:8080/api/verify_user', {
@@ -39,5 +39,8 @@ export const verifyUser = (token, callBack) => {
         return callBack(response.verified);
       })
       .catch(response => { console.log('fetch verify_user error: ', response); });
-  } else { console.log('No token!', token); }
+  } else {
+    console.log('SecurityRequests - verifyUser - No token!', token);
+    callBack(false);
+  }
 };

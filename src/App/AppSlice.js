@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const defaultState = {
   sqlResults: [],
@@ -14,17 +14,17 @@ const appSlice = createSlice({
   initialState: defaultState,
   reducers: {
     setSqlResults(state, action) {
-      console.log('appReducer setSqlResults here: ', action);
+      // console.log('appReducer setSqlResults here: ', action);
       state.sqlResults = action.payload;
     },
 
 
     setHeaderUnderline(state, action) {
-      console.log('appReducer setHeaderUnderline here: ', action);
+      // console.log('appReducer setHeaderUnderline here: ', action);
       const imposeDelay = (callback) => {
         // setTimeout(() => {
         callback();
-        // }, (action.payload.delay ? 2500 : 0));
+        // }, (action.payload.delay ? 2500 : 1000));
       };
 
       if (action.payload.delay) state.headerSelection = null;

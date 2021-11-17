@@ -1,29 +1,36 @@
 import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 
-import { setVerifiedToken } from '../../pages/Login/loginSlice.js';
+import { setVerifiedToken, setLoggedInButWaitingToVerify } from '../../pages/Login/loginSlice.js';
 import { verifyUser } from '../../server_requests/securityRequests.js';
+
+import LoadingSpinner from '../LoadingSpinner';
 
 const ProtectedRoute = ({ children, path = '/Home' }) => {
   const dispatch = useDispatch();
   const loggedIn = useSelector(state => state.login.loggedIn);
 
   useEffect(() => {
-    verifyUser(loggedIn.jwt, (newStatus) => {
-      if (loggedIn.verified !== newStatus) { dispatch(setVerifiedToken(newStatus)); }
-    });
-  });
+    dispatch(setLoggedInButWaitingToVerify(true));
 
-  console.log('Protected Route: ', loggedIn);
+    verifyUser(loggedIn.jwt, (newStatus) => {
+      dispatch(setVerifiedToken(newStatus));
+      dispatch(setLoggedInButWaitingToVerify(false));
+    });
+  }, [loggedIn.verified]);
 
   const verifiedElement = loggedIn.verified
     ? children
     : <Navigate to="/LoginPrompt" state={{ path }} />;
 
-  // return <Route path={path} element={<Navigate to="/Login" replace />} />
-  return verifiedElement;
+  return loggedIn.loggedInButWaitingToVerify ? <LoadingSpinner /> : verifiedElement;
+};
 
+ProtectedRoute.propTypes = {
+  children: PropTypes.object,
+  path: PropTypes.string
 };
 
 export default ProtectedRoute;

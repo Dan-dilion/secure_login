@@ -67,47 +67,12 @@ class App extends React.Component {
     this.state = {};
   }
 
-  // setResults = (results) => {
-  //   this.setState({
-  //     sqlResults: results
-  //   });
-  // }
-
-  // setHeaderUnderline = (routeName, delay = false) => {
-  //   const imposeDelay = (callback) => {
-  //     setTimeout(() => {
-  //       callback();
-  //     }, (delay ? 2500 : 0));
-  //   };
-  //
-  //   if (delay) this.setState({ headerSelection: null });
-  //
-  //   switch (routeName) {
-  //     case 'home':
-  //     case 'Home':
-  //     case '': imposeDelay(() => this.setState({ headerSelection: 0 })); break;
-  //     case 'about':
-  //     case 'About': imposeDelay(() => this.setState({ headerSelection: 1 })); break;
-  //     case 'private':
-  //     case 'Private': imposeDelay(() => this.setState({ headerSelection: 2 })); break;
-  //     default: break;
-  //   }
-  // };
-
-  // setLoginModalVisible = (newState, returnPath = '/Home') => {
-  //   this.setState({
-  //     loginModal: { visible: newState, returnPath: returnPath }
-  //   });
-  // }
-
-  render() {
-
-    // Load access token from local storage
+  componentDidMount = () => {
     const savedUser = JSON.parse(localStorage.getItem('ACCESS_TOKEN'));
     if (savedUser) verifyUser(savedUser.token, (result) => this.props.setVerifiedToken(result));
+  };
 
-    console.log('App here - props: ', this.props);
-
+  render() {
     return (
       <AppView
         loginModal={this.props.loginModal}

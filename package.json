@@ -19,7 +19,8 @@
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.3",
     "react-router-dom": "^6.0.2",
-    "react-scripts": "4.0.3"
+    "react-scripts": "4.0.3",
+    "react-spinners": "^0.11.0"
   },
   "scripts": {
     "start": "npm run server & npm run client; pkill node",
@@ -52,5 +53,8 @@
     "eslint-plugin-promise": "^5.1.1",
     "eslint-plugin-react": "^7.27.0",
     "nodemon": "^2.0.15"
+  },
+  "babel": {
+    "plugins": ["@emotion"]
   }
 }

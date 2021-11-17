@@ -39,6 +39,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const defaultState = {
   loggedIn: {
     verified: false,
+    loggedInButWaitingToVerify: false,
     jwt: '',
     user: {
       datecreated: '',
@@ -60,6 +61,10 @@ const loginSlice = createSlice({
     },
     setVerifiedToken(state, action) {
       state.loggedIn.verified = action.payload;
+    },
+    setLoggedInButWaitingToVerify(state, action) {
+      console.log('loginSlice - Setting waiting flag: ', action);
+      state.loggedIn.loggedInButWaitingToVerify = action.payload;
     }
   }
 });
@@ -68,5 +73,10 @@ console.log('loginSlice actions: ', loginSlice.actions);
 console.log('loginSlice reducer: ', loginSlice.reducer);
 console.log('loginSlice: ', loginSlice);
 
-export const { setLoggedIn, setVerifiedToken } = loginSlice.actions;
+export const {
+  setLoggedIn,
+  setVerifiedToken,
+  setLoggedInButWaitingToVerify
+} = loginSlice.actions;
+
 export default loginSlice.reducer;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import bcrypt from 'bcryptjs';
 
 import { setLoginModalVisible } from '../../App/AppSlice.js';
