@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
+  Container,
   Card,
   Modal,
   Backdrop,
@@ -21,75 +22,81 @@ import { About } from '../pages/About';
 
 const AppView = props => {
   const {
+    classes,
     loginModal,
     setLoginModalVisible,
     query
   } = props;
 
   return (
-    <>
+    <Container className={classes.root} maxWidth={false}>
       <Header />
 
-      <Card elevation={0}>
-        <Modal
-          open={loginModal.visible}
-          onClose={ () => setLoginModalVisible({ visible: false, returnPath: loginModal.returnPath }) }
-          closeAfterTransition
-          BackdropComponent={ Backdrop }
-          BackdropProps={{ timeout: 500 }}
-        >
-          <Zoom in={loginModal.visible}>
-            <Card variant="elevation">
-              <Login />
-            </Card>
-          </Zoom>
-        </Modal>
-      </Card>
-
-      <Routes>
-
-        <Route
-          exact path={'/'}
-          element={<Home />}
-        />
-
-        <Route
-          path={'/Home'}
-          element={<Home />}
-        />
-
-        <Route
-          path={'/About'}
-          element={<About />}
-        />
-
-        <Route
-          path={'/Private'}
-          element={
-            <ProtectedRoute
-              path={'/Private'}
+      <Container className={classes.pageArea} maxWidth={false}>
+        <Card className={classes.mainCard} variant="elevation" elevation={3}>
+          <Card>
+            <Modal
+              className={classes.modal}
+              open={loginModal.visible}
+              onClose={ () => setLoginModalVisible({ visible: false, returnPath: loginModal.returnPath }) }
+              closeAfterTransition
+              BackdropComponent={ Backdrop }
+              BackdropProps={{ timeout: 500 }}
             >
-              <Body
-                query = { query }
-              />
-            </ProtectedRoute>
-          }
-        />
+              <Zoom in={loginModal.visible}>
+                <Card className={classes.loginCard} variant="elevation">
+                  <Login />
+                </Card>
+              </Zoom>
+            </Modal>
+          </Card>
 
-        <Route
-          path={'/LoginPrompt'}
-          element = {
-            <LoginPrompt />
-          }
-        />
+          <Routes>
 
-      </Routes>
+            <Route
+              exact path={'/'}
+              element={<Home />}
+            />
 
-    </>
+            <Route
+              path={'/Home'}
+              element={<Home />}
+            />
+
+            <Route
+              path={'/About'}
+              element={<About />}
+            />
+
+            <Route
+              path={'/Private'}
+              element={
+                <ProtectedRoute
+                  path={'/Private'}
+                >
+                  <Body
+                    query = { query }
+                  />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path={'/LoginPrompt'}
+              element = {
+                <LoginPrompt />
+              }
+            />
+
+          </Routes>
+        </Card>
+      </Container>
+    </Container>
   );
 };
 
 AppView.propTypes = {
+  classes: PropTypes.object,
   loginModal: PropTypes.object,
   setLoginModalVisible: PropTypes.func.isRequired,
   query: PropTypes.string

@@ -7,15 +7,34 @@ import { setLoginModalVisible } from '../../App/AppSlice.js';
 import { setLoggedIn } from './loginSlice.js';
 import { requestLogin } from '../../server_requests/securityRequests.js';
 
-const LoginLogic = () => {
+import useStyles from './LoginStyle.js';
 
+const LoginLogic = () => {
+  const classes = useStyles();
   const { state } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // const returnPath = useSelector(state => state.app.loginModal.returnPath)
-  const [userName, setUserName] = useState('');
-  const [password, setPassword] = useState('');
   const [hash, setHash] = useState('');
+
+  const [values, setValues] = useState({
+    userName: '',
+    password: '',
+    showPassword: false
+  });
+
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value });
+    if (prop === 'password') hashPassword(event.target.value);
+  };
+
+  const handleClickShowPassword = () => {
+    setValues({ ...values, showPassword: !values.showPassword });
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
   const hashPassword = (password) => {
     bcrypt.genSalt(10, (err, salt) => {
@@ -28,14 +47,11 @@ const LoginLogic = () => {
   };
 
   const loginAction = (results) => {
-    if (results.loginSuccess) {
-      dispatch(setLoggedIn({
-        verified: results.loginSuccess,
-        jwt: results.token,
-        user: results.user
-      }));
+    console.log('LoginLogic - Login Results: ', results);
+    if (results.verified) {
+      dispatch(setLoggedIn(results));
       console.log('loginAction Success: ', results.msg);
-      console.log('\nNew token: ', results.token);
+      console.log('\nNew token: ', results.jwt);
       console.log('Location State: ', state);
       dispatch(setLoginModalVisible({ visible: false, returnPath: state.path }));
       navigate(state.path || '/Body');
@@ -44,27 +60,22 @@ const LoginLogic = () => {
     }
   };
 
-  const onChangeUsername = e => setUserName(e.target.value);
-  const onChangePassword = e => {
-    setPassword(e.target.value);
-    hashPassword(e.target.value);
-  };
-
   const handleSubmit = (event) => {
-    requestLogin(userName, password, loginAction);
+    requestLogin(values.userName, values.password, loginAction);
 
-    console.log('User name: ' + userName + ' - Password: ' + password);
+    console.log('User name: ' + values.userName + ' - Password: ' + values.password);
     event.preventDefault();
   };
 
 
   return {
-    userName,
-    password,
+    classes,
+    values,
+    handleChange,
+    handleClickShowPassword,
+    handleMouseDownPassword,
     hash,
-    handleSubmit,
-    onChangeUsername,
-    onChangePassword
+    handleSubmit
   };
 
 };

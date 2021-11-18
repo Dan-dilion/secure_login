@@ -1,10 +1,16 @@
 import React from 'react';
-import ClipLoader from 'react-spinners/ClipLoader';
+import { Container } from '@material-ui/core';
+import { RingLoader } from 'react-spinners/';
+
+import useStyles, { spinnerCss } from './LoadingSpinnerStyle.js';
 
 const LoadingSpinner = () => {
+  const classes = useStyles();
 
   return (
-    <ClipLoader color="red" loading={true} size={400} />
+    <Container className={classes.root}>
+      <RingLoader css={spinnerCss} color="#3a1f7a" size={'150'} loading={true} />
+    </Container>
   );
 };
 

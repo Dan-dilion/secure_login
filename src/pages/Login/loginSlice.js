@@ -38,6 +38,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const defaultState = {
   loggedIn: {
+    msg: '',
     verified: false,
     loggedInButWaitingToVerify: false,
     jwt: '',
@@ -57,6 +58,7 @@ const loginSlice = createSlice({
   initialState: defaultState,
   reducers: {
     setLoggedIn(state, action) {
+      // console.log('LoginSlice - Setting loggedIn with: ', action.payload);
       state.loggedIn = action.payload;
     },
     setVerifiedToken(state, action) {

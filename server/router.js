@@ -10,10 +10,12 @@ const middleware = require('./middleware/verification.js');
 
 console.log('JWT Config: ', jwtConfig);
 
-
+/**
+ *  Verify User
+ */
 router.post('/verify_user/', middleware.isLoggedIn, (request, response, next) => {
   if (request.userData) {
-    console.log('user varified: true');
+    console.log('user verified: true');
     response.send({
       verified: true,
       msg: 'Session Verification Successful',
@@ -35,6 +37,9 @@ router.post('/verify_user/', middleware.isLoggedIn, (request, response, next) =>
 
 /******************************************************************************/
 
+/**
+ *  Query Database
+ */
 router.post('/query_db/', middleware.isLoggedIn, (request, response, next) => {
   // POST parameters are accessible via the request object
   console.log(JSON.stringify(request.body.query));
@@ -73,6 +78,9 @@ router.post('/query_db/', middleware.isLoggedIn, (request, response, next) => {
 
 /******************************************************************************/
 
+/**
+ *  Login
+ */
 router.post('/login/', (request, response, next) => {
   // notice the placeholder for the string "?".
   // This is so we can escape the characters when the query is called
@@ -97,10 +105,11 @@ router.post('/login/', (request, response, next) => {
 
     // POST response
     response.send(JSON.stringify({
-      loginSuccess: true,
+      verified: true,
       msg: 'Login Success!!!',
-      token,
-      user: queryResult[0]
+      jwt: token,
+      user: queryResult[0],
+      loggedInButWaitingToVerify: true
     }));
 
     console.log('Login concluded positively');

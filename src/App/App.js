@@ -1,16 +1,13 @@
 import React from 'react';
-
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
+import { withStyles } from '@material-ui/styles';
 
 import AppView from './AppView.js';
+import AppStyle from './AppStyle.js';
 
-import { setVerifiedToken } from '../pages/Login/loginSlice.js';
-import {
-  setLoginModalVisible
-} from './AppSlice.js';
-import { verifyUser } from '../server_requests/securityRequests.js';
+import { setLoggedIn } from '../pages/Login/loginSlice.js';
+import { setLoginModalVisible } from './AppSlice.js';
 
 
 // const history = useHistory();
@@ -60,21 +57,31 @@ import { verifyUser } from '../server_requests/securityRequests.js';
 const query = 'SELECT id, username, password, email FROM node_login.users';
 
 class App extends React.Component {
-  constructor() {
+  constructor(props) {
     super();
+
+    // Find saved ACCESS_TOKEN in local storage and login if present
+    const savedUser = JSON.parse(localStorage.getItem('ACCESS_TOKEN'));
+    console.log('App - Saved User: ', savedUser);
+    if (savedUser) props.setLoggedIn(savedUser);
 
     // this.state = defaultState;
     this.state = {};
   }
 
-  componentDidMount = () => {
-    const savedUser = JSON.parse(localStorage.getItem('ACCESS_TOKEN'));
-    if (savedUser) verifyUser(savedUser.token, (result) => this.props.setVerifiedToken(result));
-  };
+
+  // componentDidMount = () => {
+  //   const savedUser = JSON.parse(localStorage.getItem('ACCESS_TOKEN'));
+  //   // console.log('App - Saved User: ', savedUser);
+  //   if (savedUser) this.props.setLoggedIn(savedUser);
+  // };
 
   render() {
+    console.log('App - The theme: ', this.props.theme);
+
     return (
       <AppView
+        classes={this.props.classes}
         loginModal={this.props.loginModal}
         setLoginModalVisible={this.props.setLoginModalVisible}
         query={query}
@@ -85,8 +92,10 @@ class App extends React.Component {
 
 App.propTypes = {
   loginModal: PropTypes.object.isRequired,
-  setVerifiedToken: PropTypes.func,
-  setLoginModalVisible: PropTypes.func
+  setLoggedIn: PropTypes.func,
+  setLoginModalVisible: PropTypes.func,
+  theme: PropTypes.object,
+  classes: PropTypes.object
 };
 
 const mapStateToProps = (state) => {
@@ -96,11 +105,11 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  setVerifiedToken,
+  setLoggedIn,
   setLoginModalVisible
 };
 
-export default connect(
+export default (withStyles(AppStyle, { withTheme: true })(connect(
   mapStateToProps,
   mapDispatchToProps
-)(App);
+)(App)));

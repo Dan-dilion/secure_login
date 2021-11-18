@@ -3,9 +3,12 @@ import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles({
   root: {
+    padding: 0,
     display: 'flex'
   },
   barStyle: {
+    borderRadius: '10px 10px 0 0',
+    background: 'linear-gradient(15deg, #000000 10%, #3a1f7a 90%)'
   },
   toolbarStyle: {
     justifyContent: 'space-between'
@@ -16,11 +19,8 @@ const useStyles = makeStyles({
     padding: '5px',
     margin: 0
   },
-  menuButtonStyle: {
-    // backgroundColor: 'primary',
-    // '&:hover': {
-    //   backgroundColor: deepPurple[700]
-    // }
+  tab: {
+    minWidth: '10rem'
   },
   dropdownStyle: {
   }

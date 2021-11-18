@@ -14,7 +14,6 @@ import {
   Home as HomeIcon
 } from '@material-ui/icons';
 
-
 import HeaderLogic from './HeaderLogic.js';
 
 const Header = (props) => {
@@ -27,14 +26,14 @@ const Header = (props) => {
   } = HeaderLogic(props);
 
   return (
-    <Container className={classes.root}>
-      <AppBar position='static' className={classes.barStyle}>
+    <Container className={classes.root} maxWidth={false}>
+      <AppBar position='static' className={classes.barStyle} variant="elevation" elevation={0}>
         <Toolbar className={classes.toolbarStyle}>
 
           <div className={classes.titleStyle}>
             <Typography variant='h4'>JWT</Typography>
             <Typography variant='h4'>&nbsp;S</Typography>
-            <Typography variant='h6'>mart</Typography>
+            <Typography variant='h6'>ecure</Typography>
             <Typography variant='h4'>&nbsp;L</Typography>
             <Typography variant='h6'>ogin</Typography>
             <Typography variant='h4'>&nbsp;S</Typography>
@@ -46,9 +45,9 @@ const Header = (props) => {
               value={headerSelection}
               indicatorColor="secondary"
             >
-              <Tab className={classes.tab} icon={<HomeIcon />} onClick={() => handleChange('Home')} label='Home' />
-              <Tab className={classes.tab} icon={<InfoIcon />} onClick={() => handleChange('About')} label='About' />
-              <Tab className={classes.tab} icon={(verifiedLogin ? <LockOpenIcon /> : <LockIcon />)} onClick={() => handleChange('Private')} label='Private' />
+              <Tab className={classes.tab} icon={<HomeIcon />} onClick={() => handleChange('Home')} label='Home' wrapped />
+              <Tab className={classes.tab} icon={<InfoIcon />} onClick={() => handleChange('About')} label='About' wrapped />
+              <Tab className={classes.tab} icon={(verifiedLogin ? <LockOpenIcon /> : <LockIcon />)} onClick={() => handleChange('Private')} label='Private' wrapped />
             </Tabs>
           </div>
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -12,14 +12,16 @@ const ProtectedRoute = ({ children, path = '/Home' }) => {
   const dispatch = useDispatch();
   const loggedIn = useSelector(state => state.login.loggedIn);
 
-  useEffect(() => {
+  // Had to use useLayoutEffect because useEffect wasn't fast enough to hide the
+  // private route upon a route change with no valid jwt
+  useLayoutEffect(() => {
     dispatch(setLoggedInButWaitingToVerify(true));
 
     verifyUser(loggedIn.jwt, (newStatus) => {
       dispatch(setVerifiedToken(newStatus));
       dispatch(setLoggedInButWaitingToVerify(false));
     });
-  }, [loggedIn.verified]);
+  }, []);
 
   const verifiedElement = loggedIn.verified
     ? children

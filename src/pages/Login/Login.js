@@ -5,31 +5,37 @@ import {
   Button,
   TextField,
   Paper,
-  Typography
+  Typography,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  FormControl,
+  IconButton
 } from '@material-ui/core';
-// import AccessAlarmIcon from '@material-ui/icons/AccessAlarm';
+import {
+  AccountCircle,
+  Visibility,
+  VisibilityOff
+} from '@material-ui/icons';
 
 import LoginLogic from './LoginLogic.js';   // Page logic
-import useStyles from './LoginStyle.js';    // Page MUI style
 
 export const Login = props => {
 
   // Deconstruct page logic
   const {
-    userName,
-    password,
+    classes,
+    values,
+    handleChange,
+    handleClickShowPassword,
+    handleMouseDownPassword,
     hash,
-    handleSubmit,
-    onChangeUsername,
-    onChangePassword
+    handleSubmit
   } = LoginLogic(props);
-
-  // Establish classes from the imported MUI style
-  const classes = useStyles();
 
   return (
     <>
-      <Container>
+      <Container className={classes.root}>
         <div className='login-form'>
           <form
             autoComplete="off"
@@ -38,6 +44,7 @@ export const Login = props => {
             <Paper
               className={classes.containerStyle}
               variant="elevation"
+               elevation={0}
               >
                 <Grid container spacing={3}>
                   <Grid item xs={12}>
@@ -48,16 +55,48 @@ export const Login = props => {
                           id="outlined-basic"
                           variant="outlined"
                           color="primary"
-                          label="Username"
+                          label={'Username'}
                           type="text"
+                          value={values.userName}
                           name="userName"
-                          onChange={onChangeUsername}
+                          onChange={handleChange('userName')}
                           fullWidth
-                          required
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                  <AccountCircle className={classes.userNameIcon} />
+                              </InputAdornment>
+                            )
+                          }}
                         />
                       </Grid>
 
                       <Grid item xs={12}>
+
+                        <FormControl className={classes.pwdBox} variant="outlined">
+                          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                          <OutlinedInput
+                            id="outlined-adornment-password"
+                            type={values.showPassword ? 'text' : 'password'}
+                            value={values.password}
+                            onChange={handleChange('password')}
+                            labelWidth={70}
+                            endAdornment={
+                              <InputAdornment position="end">
+                                <IconButton
+                                  aria-label="toggle password visibility"
+                                  onClick={handleClickShowPassword}
+                                  onMouseDown={handleMouseDownPassword}
+                                  edge="end"
+                                >
+                                  {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                </IconButton>
+                              </InputAdornment>
+                            }
+                          />
+                        </FormControl>
+
+{/*
                         <TextField
                           id="outlined-basic"
                           variant="outlined"
@@ -69,6 +108,8 @@ export const Login = props => {
                           fullWidth
                           required
                         />
+*/}
+
                       </Grid>
                     </Grid>
                   </Grid>
@@ -87,8 +128,8 @@ export const Login = props => {
         </div>
 
         <div className={classes.infoPanel}>
-          <Typography variant='h5'>User name: {userName}</Typography>
-          <Typography variant='h5'>password: {password}</Typography>
+          <Typography variant='h5'>User name: {values.userName}</Typography>
+          <Typography variant='h5'>password: {values.password}</Typography>
           <Typography variant='h5'>Hash: {hash}</Typography>
         </div>
       </Container>
