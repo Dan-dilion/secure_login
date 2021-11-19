@@ -40,9 +40,18 @@ router.post('/verify_user/', middleware.isLoggedIn, (request, response, next) =>
 /**
  *  Query Database
  */
-router.post('/query_db/', middleware.isLoggedIn, (request, response, next) => {
+router.post('/query_DB/', middleware.isLoggedIn, (request, response, next) => {
+
+  let statement = '';
+  switch (request.body.query) {
+    case 'get_user_details':
+      statement = 'SELECT id, username, password, email FROM node_login.users';
+      break;
+    default: break;
+  }
+
   // POST parameters are accessible via the request object
-  console.log(JSON.stringify(request.body.query));
+  console.log(JSON.stringify(statement));
 
   console.log('1 -- query_DB Request triggered');
 
@@ -70,7 +79,7 @@ router.post('/query_db/', middleware.isLoggedIn, (request, response, next) => {
     });
   });
 
-  queryDatabase(request.body.query).then(resolveQuery, rejectQuery);
+  queryDatabase(statement).then(resolveQuery, rejectQuery);
 });
 
 

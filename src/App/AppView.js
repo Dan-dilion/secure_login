@@ -21,11 +21,11 @@ import { Home } from '../pages/Home/Home.js';
 import { About } from '../pages/About';
 
 const AppView = props => {
+  // De-structure logic
   const {
     classes,
     loginModal,
-    setLoginModalVisible,
-    query
+    setLoginModalVisible
   } = props;
 
   return (
@@ -74,9 +74,7 @@ const AppView = props => {
                 <ProtectedRoute
                   path={'/Private'}
                 >
-                  <Body
-                    query = { query }
-                  />
+                  <Body />
                 </ProtectedRoute>
               }
             />

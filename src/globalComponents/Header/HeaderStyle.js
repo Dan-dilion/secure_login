@@ -8,7 +8,7 @@ const useStyles = makeStyles({
   },
   barStyle: {
     borderRadius: '10px 10px 0 0',
-    background: 'linear-gradient(15deg, #000000 10%, #3a1f7a 90%)'
+    background: 'linear-gradient(15deg, #000000 10%, #3a1f7a 30%, #000000 70%, #3a1f7a 100%)'
   },
   toolbarStyle: {
     justifyContent: 'space-between'

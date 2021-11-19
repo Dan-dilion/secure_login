@@ -4,7 +4,7 @@ import { Container, Card, Typography, Button } from '@material-ui/core';
 import LoginPromptLogic from './LoginPromptLogic.js';
 
 const LoginPrompt = (props) => {
-  // Deconstruct logic
+  // De-construct logic
   const {
     classes,
     state,

@@ -47,12 +47,9 @@ const LoginLogic = () => {
   };
 
   const loginAction = (results) => {
-    console.log('LoginLogic - Login Results: ', results);
     if (results.verified) {
       dispatch(setLoggedIn(results));
       console.log('loginAction Success: ', results.msg);
-      console.log('\nNew token: ', results.jwt);
-      console.log('Location State: ', state);
       dispatch(setLoginModalVisible({ visible: false, returnPath: state.path }));
       navigate(state.path || '/Body');
     } else {
@@ -62,8 +59,6 @@ const LoginLogic = () => {
 
   const handleSubmit = (event) => {
     requestLogin(values.userName, values.password, loginAction);
-
-    console.log('User name: ' + values.userName + ' - Password: ' + values.password);
     event.preventDefault();
   };
 

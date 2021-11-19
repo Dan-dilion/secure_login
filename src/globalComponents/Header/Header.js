@@ -17,7 +17,7 @@ import {
 import HeaderLogic from './HeaderLogic.js';
 
 const Header = (props) => {
-  // Destructure logic
+  // De-structure logic
   const {
     classes,
     handleChange,

@@ -1,42 +1,57 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Container } from '@material-ui/core';
+import {
+  Container,
+  Typography,
+  Card
+} from '@material-ui/core';
 
 import BodyLogic from './BodyLogic.js';
-import { RenderTable } from '../../globalComponents/RenderTable/RenderTable.js';
-
-import './Body.css';
+import UserDetailsTable from './Components/UserDetailsTable/';
+import { queryDatabase } from '../../server_requests/queryDatabase.js';
 
 export const Body = props => {
-  // Destructure logic
+  // De-structure logic
   const {
-    sqlResults,
+    classes,
     loggedIn,
-    pressMeButton
+    pressMeCallBack
   } = BodyLogic(props);
 
+  useEffect(() => {
+    queryDatabase('get_user_details', loggedIn.jwt, results => pressMeCallBack(results));
+  }, []);
+
   return (
-    <Container className="results_wrapper">
-      <div className="press_me_wrapper">
-        <button onClick={pressMeButton}>Press Me</button>
-      </div>
-      <div>
-        <center>
-          <label style={{ color: 'black' }}>JWT: - </label>
-          <input
-            className="jwt"
-            type="text"
-            value={ loggedIn.jwt }
-            disabled
-          />
-        </center>
-      </div>
-      <div className="table_wrapper">
-        <h3>Results: </h3>
-        <div className="results">
-          { RenderTable(sqlResults) }
-        </div>
-      </div>
+    <Container className={classes.root}>
+      <Container>
+        <Typography className={classes.message} variant="h4">
+          This page is secure.
+        </Typography>
+        <Typography className={classes.message}>
+          While a hacker could access the style and layout of this page fairly
+          easily the information on it is retrieved from a database and is only
+          available if the current session has a valid Json Web Token (JWT).
+        </Typography>
+      </Container>
+      <Card className={classes.infoCard} variant="outlined">
+        <Typography variant="h5">
+          Here is the current JWT:
+        </Typography>
+
+
+        <Card
+          className={classes.jwtCard}
+          variant="outlined"
+        >
+          <Typography className={classes.jwtTextBox} variant="h6">
+            {loggedIn.jwt}
+          </Typography>
+        </Card>
+
+        <UserDetailsTable />
+
+      </Card>
     </Container>
   );
 };

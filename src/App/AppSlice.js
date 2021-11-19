@@ -14,13 +14,11 @@ const appSlice = createSlice({
   initialState: defaultState,
   reducers: {
     setSqlResults(state, action) {
-      // console.log('appReducer setSqlResults here: ', action);
       state.sqlResults = action.payload;
     },
 
 
     setHeaderUnderline(state, action) {
-      // console.log('appReducer setHeaderUnderline here: ', action);
       const imposeDelay = (callback) => {
         // setTimeout(() => {
         callback();
