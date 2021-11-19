@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Container } from '@material-ui/core';
 
 import BodyLogic from './BodyLogic.js';
 import { RenderTable } from '../../globalComponents/RenderTable/RenderTable.js';
@@ -15,7 +16,7 @@ export const Body = props => {
   } = BodyLogic(props);
 
   return (
-    <div className="results_wrapper">
+    <Container className="results_wrapper">
       <div className="press_me_wrapper">
         <button onClick={pressMeButton}>Press Me</button>
       </div>
@@ -36,7 +37,7 @@ export const Body = props => {
           { RenderTable(sqlResults) }
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 
