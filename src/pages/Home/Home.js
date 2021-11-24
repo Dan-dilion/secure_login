@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container } from '@material-ui/core';
 
-export const Home = () => {
+const Home = () => {
   return (
     <>
       <Container>
@@ -10,3 +10,5 @@ export const Home = () => {
     < />
   );
 };
+
+export default Home;

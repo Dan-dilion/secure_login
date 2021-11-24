@@ -13,8 +13,8 @@ export const theme = createTheme({
     primary: deepPurple,
     secondary: purple,
     action: { hoverOpacity: 0.2 }
-  }
-  // overrides: {
+  },
+  overrides: {
   //   MuiOutlinedInput: {
   //     root: {
   //       '& $notchedOutline': {              // For unfocused textbox outline
@@ -27,5 +27,5 @@ export const theme = createTheme({
   //       }
   //     }
   //   }
-  // }
+  }
 });

@@ -5,7 +5,8 @@ const defaultState = {
   headerSelection: 0,
   loginModal: {
     visible: false,
-    returnPath: '/Home'
+    returnPath: '/Home',
+    loginOrRegister: true
   }
 };
 
@@ -42,13 +43,34 @@ const appSlice = createSlice({
 
     setLoginModalVisible(state, action) {
       console.log('appReducer setLoginModalVisible here: ', action);
-      state.loginModal = {
-        visible: action.payload.visible,
-        returnPath: action.payload.returnPath ? action.returnPath : '/Home'
-      };
+      state.loginModal.visible = action.payload.visible;
+      state.loginModal.returnPath = action.payload.returnPath ? action.returnPath : '/Home';
+    },
+
+
+    setLoginOrRegister(state, action) {
+      console.log('appReducer setLoginOrRegister here: ', action);
+      let newState;
+      switch (action.payload) {
+        case true:
+        case 'true':
+        case 'Login':
+        case 'login': newState = true; break;
+        case false:
+        case 'false':
+        case 'Register':
+        case 'register': newState = false; break;
+        default: newState = false;
+      }
+      state.loginModal.loginOrRegister = newState;  // True = login
     }
   }
 });
 
-export const { setSqlResults, setHeaderUnderline, setLoginModalVisible } = appSlice.actions;
+export const {
+  setSqlResults,
+  setHeaderUnderline,
+  setLoginModalVisible,
+  setLoginOrRegister
+} = appSlice.actions;
 export default appSlice.reducer;

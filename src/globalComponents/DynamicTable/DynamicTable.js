@@ -23,7 +23,7 @@ const DynamicTable = (props) => {
   } = DynamicTableLogic(props);
 
   return (
-    <TableContainer className={classes.root} component={Paper}>
+    <TableContainer className={classes.root}>
       <Table className={classes.table}>
         <TableHead className={classes.head}>
           <TableRow>

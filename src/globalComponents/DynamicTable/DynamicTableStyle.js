@@ -2,9 +2,11 @@ import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
+    padding: 0,
     width: '100%'
   },
   table: {
+    padding: 0,
     width: '100%'
   },
   head: {
@@ -12,10 +14,10 @@ const useStyles = makeStyles(theme => ({
   },
   headerCells: {
     color: theme.palette.common.white,
-    padding: '3px'
+    padding: '7px'
   },
   bodyCells: {
-    padding: '3px'
+    padding: '7px'
   }
 }));
 

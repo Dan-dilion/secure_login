@@ -10,7 +10,7 @@ import BodyLogic from './BodyLogic.js';
 import UserDetailsTable from './Components/UserDetailsTable/';
 import { queryDatabase } from '../../server_requests/queryDatabase.js';
 
-export const Body = props => {
+const Body = props => {
   // De-structure logic
   const {
     classes,
@@ -24,7 +24,6 @@ export const Body = props => {
 
   return (
     <Container className={classes.root}>
-      <Container>
         <Typography className={classes.message} variant="h4">
           This page is secure.
         </Typography>
@@ -33,12 +32,10 @@ export const Body = props => {
           easily the information on it is retrieved from a database and is only
           available if the current session has a valid Json Web Token (JWT).
         </Typography>
-      </Container>
-      <Card className={classes.infoCard} variant="outlined">
-        <Typography variant="h5">
+
+        <Typography variant="h6">
           Here is the current JWT:
         </Typography>
-
 
         <Card
           className={classes.jwtCard}
@@ -49,9 +46,12 @@ export const Body = props => {
           </Typography>
         </Card>
 
-        <UserDetailsTable />
-
-      </Card>
+      <Typography variant="h6">
+        Here is a list of user details from the database:
+      </Typography>
+      <div className={classes.tableContainer}>
+        <UserDetailsTable className={classes.tableContainer} maxWidth={false} />
+      </div>
     </Container>
   );
 };
@@ -60,3 +60,5 @@ Body.propTypes = {
   sqlResults: PropTypes.array,
   jwt: PropTypes.string
 };
+
+export default Body;

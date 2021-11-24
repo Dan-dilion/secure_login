@@ -7,11 +7,8 @@ const useStyles = makeStyles(theme => ({
   message: {
     marginBottom: '2rem'
   },
-  infoCard: {
-    padding: '2rem'
-  },
   jwtCard: {
-    width: '95%',
+    width: '100%',
     margin: '1rem auto',
     padding: '0 .5rem'
   },
@@ -23,6 +20,9 @@ const useStyles = makeStyles(theme => ({
     '&::-webkit-scrollbar': {
       display: 'none'
     }
+  },
+  tableContainer: {
+    margin: '1rem -24px'
   }
 }));
 

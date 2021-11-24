@@ -7,7 +7,11 @@ import AppView from './AppView.js';
 import AppStyle from './AppStyle.js';
 
 import { setLoggedIn } from '../pages/Login/loginSlice.js';
-import { setLoginModalVisible, setHeaderUnderline } from './AppSlice.js';
+import {
+  setLoginModalVisible,
+  setLoginOrRegister,
+  setHeaderUnderline
+} from './AppSlice.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -37,6 +41,7 @@ class App extends React.Component {
         classes={this.props.classes}
         loginModal={this.props.loginModal}
         setLoginModalVisible={this.props.setLoginModalVisible}
+        setLoginOrRegister={this.props.setLoginOrRegister}
       />
     );
   }
@@ -46,6 +51,7 @@ App.propTypes = {
   loginModal: PropTypes.object.isRequired,
   setLoggedIn: PropTypes.func,
   setLoginModalVisible: PropTypes.func,
+  setLoginOrRegister: PropTypes.func,
   setHeaderUnderline: PropTypes.func,
   theme: PropTypes.object,
   classes: PropTypes.object
@@ -60,6 +66,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   setLoggedIn,
   setLoginModalVisible,
+  setLoginOrRegister,
   setHeaderUnderline
 };
 

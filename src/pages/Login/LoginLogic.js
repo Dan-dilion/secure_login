@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 import bcrypt from 'bcryptjs';
 
-import { setLoginModalVisible } from '../../App/AppSlice.js';
+import { setLoginModalVisible, setLoginOrRegister } from '../../App/AppSlice.js';
 import { setLoggedIn } from './loginSlice.js';
 import { requestLogin } from '../../server_requests/securityRequests.js';
 
@@ -15,6 +15,7 @@ const LoginLogic = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // const returnPath = useSelector(state => state.app.loginModal.returnPath)
+
   const [hash, setHash] = useState('');
 
   const [values, setValues] = useState({
@@ -65,11 +66,12 @@ const LoginLogic = () => {
 
   return {
     classes,
+    setLoginOrRegister,
+    dispatch,
     values,
     handleChange,
     handleClickShowPassword,
     handleMouseDownPassword,
-    hash,
     handleSubmit
   };
 

@@ -5,6 +5,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsAdapter from '@date-io/date-fns';
 
 import './index.css';
 import rootReducer from './reducers/';
@@ -23,12 +25,14 @@ const store = configureStore({
 // tripping errors in the console. Should be fixed when MUI gets updated
 ReactDOM.render(
   <BrowserRouter basename = {process.env.PUBLIC_URL}>
-    <MuiThemeProvider theme={theme}>
-      <Provider store={store}>
-        <CssBaseline />
-        <App />
-      </Provider>
-    </MuiThemeProvider>
+    <MuiPickersUtilsProvider utils={DateFnsAdapter}>
+      <MuiThemeProvider theme={theme}>
+        <Provider store={store}>
+          <CssBaseline />
+          <App />
+        </Provider>
+      </MuiThemeProvider>
+    </MuiPickersUtilsProvider>
   </BrowserRouter>,
   document.getElementById('root')
 );

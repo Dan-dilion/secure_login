@@ -12,20 +12,22 @@ import {
   Zoom
 } from '@material-ui/core';
 
-import ProtectedRoute from '../globalComponents/ProtectedRoute/ProtectedRoute.js';
-import Header from '../globalComponents/Header/Header.js';
+import ProtectedRoute from '../globalComponents/ProtectedRoute/';
+import Header from '../globalComponents/Header/';
 import LoginPrompt from '../pages/LoginPrompt/';
-import { Body } from '../pages/Body/Body.js';
-import { Login } from '../pages/Login/Login.js';
-import { Home } from '../pages/Home/Home.js';
-import { About } from '../pages/About';
+import Body from '../pages/Body/';
+import Login from '../pages/Login/';
+import Register from '../pages/Register/';
+import Home from '../pages/Home/';
+import About from '../pages/About/';
 
 const AppView = props => {
   // De-structure logic
   const {
     classes,
     loginModal,
-    setLoginModalVisible
+    setLoginModalVisible,
+    setLoginOrRegister
   } = props;
 
   return (
@@ -38,14 +40,17 @@ const AppView = props => {
             <Modal
               className={classes.modal}
               open={loginModal.visible}
-              onClose={ () => setLoginModalVisible({ visible: false, returnPath: loginModal.returnPath }) }
+              onClose={ () => {
+                setLoginModalVisible({ visible: false, returnPath: loginModal.returnPath });
+                setTimeout(() => setLoginOrRegister(true), 1000);   // timeout is to allow transition to complete
+              }}
               closeAfterTransition
               BackdropComponent={ Backdrop }
               BackdropProps={{ timeout: 500 }}
             >
               <Zoom in={loginModal.visible}>
                 <Card className={classes.loginCard} variant="elevation">
-                  <Login />
+                  { loginModal.loginOrRegister ? <Login /> : <Register /> }
                 </Card>
               </Zoom>
             </Modal>
@@ -96,7 +101,8 @@ const AppView = props => {
 AppView.propTypes = {
   classes: PropTypes.object,
   loginModal: PropTypes.object,
-  setLoginModalVisible: PropTypes.func.isRequired,
+  setLoginModalVisible: PropTypes.func,
+  setLoginOrRegister: PropTypes.func,
   query: PropTypes.string
 };
 
