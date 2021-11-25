@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   inputsContainer: {
     display: 'flex',
     padding: 0,
-    paddingBottom: theme.spacing(2)
+    paddingBottom: theme.spacing(4)
   },
   leftPanel: {
     padding: 0,
@@ -34,7 +34,10 @@ const useStyles = makeStyles(theme => ({
     paddingLeft: theme.spacing(1)
   },
   inputBoxs: {
-    width: '100%'
+    width: '100%',
+    margin: theme.spacing(1),
+    marginLeft: 0,
+    marginRight: 0
     // width: '25ch',
   },
   inputIcon: {

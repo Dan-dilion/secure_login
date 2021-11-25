@@ -32,8 +32,8 @@ const Register = (props) => {
     setLoginOrRegister,
     values,
     setValues,
-    validateEmailInput,
     handleClickShowPassword,
+    handleSubmit,
     preventDefaultEvent
   } = RegisterLogic(props);
 
@@ -49,100 +49,156 @@ const Register = (props) => {
             onClick={ () => dispatch(setLoginOrRegister(true)) }
           ><BackArrow className={classes.backIcon}/></IconButton>
         </Container>
-        <Typography className={classes.headingDiscription} variant="p">
+
+        <Typography className={classes.headingDiscription}>
           Enter your details here to create an account
         </Typography>
+
         <Container className={classes.inputsContainer}>
           <Container className={classes.leftPanel}>
-            <TextField
+            <FormControl
               className={classes.inputBoxs}
-              name="username"
-              label="Username"
-              type="text"
-              value={values.username}
-              onChange={event => setValues({ ...values, username: event.target.value })}
-              InputProps={{
-                endAdornment: (
+              error={values.username.error}
+            >
+              <InputLabel htmlFor="custom-username-TextField">Username</InputLabel>
+              <Input
+                id="custom-username-TextField"
+                type="text"
+                value={values.username.value}
+                onChange={event => setValues({
+                  ...values,
+                  username: {
+                    ...values.username,
+                    value: event.target.value,
+                    error: false,
+                    message: ''
+                  }
+                })}
+                endAdornment = {
                   <InputAdornment position="end">
                       <AccountCircle className={classes.inputIcon} />
                   </InputAdornment>
-                )
-              }}
-            />
-
-            <TextField
-              className={classes.inputBoxs}
-              name="email"
-              label="Email"
-              type="email"
-              error={values.emailError}
-              helperText={values.emailMessage}
-              value={values.email}
-              onChange={event => {
-                validateEmailInput(event.target.value);
-                setValues({ ...values, email: event.target.value });
-              }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                      <Email className={classes.inputIcon} />
-                  </InputAdornment>
-                )
-              }}
-            />
-
-            <FormControl className={classes.inputBoxs}>
-              <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
-              <Input
-                id="standard-adornment-password"
-                type={values.showPassword ? 'text' : 'password'}
-                value={values.password1}
-                onChange={event => setValues({ ...values, password1: event.target.value })}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={preventDefaultEvent}
-                      edge="end"
-                    >
-                      {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
                 }
               />
+              <FormHelperText
+                style={{
+                  opacity: values.username.error ? 1 : 0,
+                  position: 'absolute',
+                  top: '100%'
+                }}
+              >{values.username.message}</FormHelperText>
             </FormControl>
 
             <FormControl
               className={classes.inputBoxs}
-              error={values.password1 !== values.password2}
+              error={values.email.error}
             >
-              <InputLabel htmlFor="standard-adornment-password">Confirm Password</InputLabel>
+              <InputLabel htmlFor="custom-email-TextField">Email</InputLabel>
               <Input
-                id="standard-adornment-password"
-                type={values.showPassword ? 'text' : 'password'}
-                value={values.password2}
-                onChange={event => setValues({ ...values, password2: event.target.value })}
-                endAdornment={
+                id="custom-email-TextField"
+                type="email"
+                value={values.email.value}
+                onChange={event => {
+                  setValues({
+                    ...values,
+                    email: {
+                      ...values.email,
+                      value: event.target.value,
+                      error: false,
+                      message: ''
+                    }
+                  });
+                }}
+                endAdornment= {
                   <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={preventDefaultEvent}
-                      edge="end"
-                    >
-                      {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
+                      <Email className={classes.inputIcon} />
                   </InputAdornment>
                 }
               />
             <FormHelperText
               style={{
-                opacity: values.password1 !== values.password2 ? 1 : 0,
+                opacity: values.email.error ? 1 : 0,
                 position: 'absolute',
                 top: '100%'
               }}
-            >Passwords do not match!</FormHelperText>
+            >{values.email.message}</FormHelperText>
+            </FormControl>
+
+            <FormControl className={classes.inputBoxs} error={values.password1.error}>
+              <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+              <Input
+                id="standard-adornment-password"
+                type={values.password1.showPasswords ? 'text' : 'password'}
+                value={values.password1.value}
+                onChange={event => setValues({
+                  ...values,
+                  password1: {
+                    ...values.password1,
+                    value: event.target.value,
+                    error: false,
+                    message: ''
+                  }
+                })}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={preventDefaultEvent}
+                      edge="end"
+                    >
+                      {values.password1.showPasswords ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+              <FormHelperText
+                style={{
+                  opacity: values.password1.error ? 1 : 0,
+                  position: 'absolute',
+                  top: '100%'
+                }}
+              >{values.password1.message}</FormHelperText>
+            </FormControl>
+
+            <FormControl
+              className={classes.inputBoxs}
+              error={values.password2.error}
+            >
+              <InputLabel htmlFor="standard-adornment-password">Confirm Password</InputLabel>
+              <Input
+                id="standard-adornment-password"
+                type={values.password1.showPasswords ? 'text' : 'password'}
+                value={values.password2.value}
+                onChange={event => setValues({
+                  ...values,
+                  password2: {
+                    ...values.password2,
+                    value: event.target.value,
+                    error: false,
+                    message: ''
+                  }
+                })}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={preventDefaultEvent}
+                      edge="end"
+                    >
+                      {values.password1.showPasswords ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+              <FormHelperText
+                style={{
+                  opacity: values.password2.error ? 1 : 0,
+                  position: 'absolute',
+                  top: '100%'
+                }}
+              >{values.password2.message}</FormHelperText>
             </FormControl>
 
           </Container>
@@ -153,14 +209,31 @@ const Register = (props) => {
               name="phone"
               label="Phone Number"
               type="phone"
-              value={values.phone}
-              onChange={event => setValues({ ...values, phone: event.target.value })}
+              error={values.phone.error}
+              helperText={values.phone.message}
+              value={values.phone.value}
+              onChange={event => setValues({
+                ...values,
+                phone: {
+                  ...values.phone,
+                  value: event.target.value,
+                  error: false,
+                  message: ''
+                }
+              })}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
                       <Email className={classes.inputIcon} />
                   </InputAdornment>
                 )
+              }}
+              FormHelperTextProps={{
+                style: {
+                  opacity: values.phone.error ? 1 : 0,
+                  position: 'absolute',
+                  top: '100%'
+                }
               }}
             />
 
@@ -169,8 +242,18 @@ const Register = (props) => {
               name="address"
               label="Address"
               type="address"
-              value={values.address}
-              onChange={event => setValues({ ...values, address: event.target.value })}
+              error={values.address.error}
+              helperText={values.address.message}
+              value={values.address.value}
+              onChange={event => setValues({
+                ...values,
+                address: {
+                  ...values.address,
+                  value: event.target.value,
+                  error: false,
+                  message: ''
+                }
+              })}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -190,34 +273,62 @@ const Register = (props) => {
               maxDateMessage={'DOB cannot exceed todays date!'}
               invalidDateMessage={'Invalid date format! Please enter DD/MM/YYYY'}
               autoOk={true}
-              value={values.dob}
+              animateYearScrolling={true}
+              error={values.dob.error}
+              helperText={values.dob.message}
+              value={values.dob.value}
               label="Date Of Birth"
-              onChange={date => setValues({ ...values, dob: date })}
+              onChange={date => setValues({
+                ...values,
+                dob: {
+                  ...values.dob,
+                  value: date,
+                  error: false,
+                  message: ''
+                }
+              })}
               format="dd/MM/yyyy"
               KeyboardButtonProps={{ edge: 'end' }}
             />
 
             <FormControl
               className={classes.inputBoxs}
+              error={values.gender.error}
             >
               <InputLabel id="demo-simple-select-label">Gender</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={values.gender}
-                onChange={event => setValues({ ...values, gender: event.target.value })}
+                value={values.gender.value}
+                onChange={event => setValues({
+                  ...values,
+                  gender: {
+                    ...values.gender,
+                    value: event.target.value,
+                    error: false,
+                    message: ''
+                  }
+                })}
               >
                 <MenuItem value={10}>Male</MenuItem>
                 <MenuItem value={20}>Female</MenuItem>
                 <MenuItem value={30}>Prefer not to say</MenuItem>
               </Select>
+              <FormHelperText
+                style={{
+                  opacity: values.gender.error ? 1 : 0,
+                  position: 'absolute',
+                  top: '100%'
+                }}
+              >{values.gender.message}</FormHelperText>
+
             </FormControl>
 
 
           </Container>
         </Container>
 
-        <Button color="primary" variant="contained">Sign Up</Button>
+        <Button onClick={handleSubmit} color="primary" variant="contained">Sign Up</Button>
       </form>
     </Container>
   );
