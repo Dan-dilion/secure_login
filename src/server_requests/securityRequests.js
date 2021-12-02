@@ -45,14 +45,16 @@ export const verifyUser = (token, callBack) => {
   }
 };
 
-export const checkPassword = pwd => {
-  return fetch('http://localhost:8080/api/check_password_strength/', {
+
+// Register New User
+export const registerUser = userDetails => {
+  return fetch('http://localhost:8080/api/register_new_user/', {
     method: 'post',
     headers: {
       Accept: 'application/json',                               // Allow JSON responses
       'Content-Type': 'application/json'                        // Incoming data type to be JSON
     },
-    body: JSON.stringify({ password: pwd })
+    body: JSON.stringify({ userDetails: userDetails })
   })
     .then(response => response.json());
 };

@@ -3,11 +3,11 @@ const router = express.Router();
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const owasp = require('owasp-password-strength-test');
 
 const db = require('./db.js');
 const jwtConfig = require('./jwtConfig.js');
 const middleware = require('./middleware/verification.js');
+const utils = require('./server_utils');
 
 console.log('JWT Config: ', jwtConfig);
 
@@ -82,106 +82,18 @@ router.post('/query_DB/', middleware.isLoggedIn, (request, response, next) => {
  *  Check Email Exists
  */
 
-router.post('/check_email/', (request, response, next) => {
-  const checkEmailQuery = 'SELECT * FROM node_login.users WHERE email = ?';
+router.post('/check_email/', async (request, response, next) => {
 
-  const resolveQuery = result => {
-    response.set({ 'Content-Type': 'application/json' });                          // Response to be JSON format
-    response.send(JSON.stringify({ result: result.length > 0 }));
-  };
-
-  const rejectQuery = result => {
-    response.send(JSON.stringify('Something went terribly wrong!!! ' + result));
-  };
-
-  const queryDatabase = query => new Promise((resolve, reject) => {
-    db.query(query, [request.body.email], (err, result, fields) => {
-      if (err) {
-        reject(new Error('Database Error!!! ' + err));
+  await utils.checkEmailExists(request.body.email)
+    .then(result => {
+      if (result.result) {
+        response.set({ 'Content-Type': 'application/json' });                          // Response to be JSON format
+        response.send(JSON.stringify(result));
       } else {
-        resolve(result);
+        response.send(JSON.stringify('Something went terribly wrong!!! ' + result));
       }
     });
-  });
-
-  queryDatabase(checkEmailQuery).then(resolveQuery, rejectQuery);
 });
-
-/******************************************************************************/
-
-/**
- * Check Password Strength
- */
-
- /**
-  *  Password Tests:
-  *  0 - (Required) Must be above min length
-  *  1 - (Required) Must be below max length
-  *  2 - (Required) Forbid repeating letters (3 or more)
-  *  3 - (Optional) Must have at least 1 lowercase letter
-  *  4 - (Optional) Must have at least 1 uppercase letter
-  *  5 - (Optional) Must have at least 1 number
-  *  6 - (Optional) Must have at least 1 special character
-  */
-
-router.post('/check_password_strength/', (request, response, next) => {
-
-  const returnObject = {
-    isTooWeak: true,
-    errorMessage: ''
-  };
-
-  owasp.config({
-    allowPassphrases: true,
-    maxLength: 128,   // Protect against long password DDOS attack
-    minLength: 8,
-    minPhraseLength: 20,
-    minOptionalTestsToPass: 4
-  });
-
-  const testResults = owasp.test(request.body.password);
-
-  const optionalTestMessage = () => {
-    let testCount = 0;
-    let message = 'Password is too weak, try adding';
-
-    const appendMessage = addition => {
-      message += `${testCount > 1 ? ' or ' : ''} a`;
-      message += addition;
-    };
-
-    if (!testResults.passedTests.includes(3)) {
-      testCount++;
-      appendMessage(' lowercase letter');
-    }
-    if (!testResults.passedTests.includes(4)) {
-      testCount++;
-      appendMessage('n uppercase letter');
-    }
-    if (!testResults.passedTests.includes(5)) {
-      testCount++;
-      appendMessage(' number');
-    }
-    if (!testResults.passedTests.includes(6)) {
-      testCount++;
-      appendMessage(' special character');
-    }
-
-    return message;
-  };
-
-  if (testResults.requiredTestErrors.length > 0) {
-    returnObject.errorMessage = testResults.requiredTestErrors[0];
-  } else if (testResults.optionalTestsPassed <= 2) {
-    returnObject.errorMessage = optionalTestMessage();
-  } else {
-    returnObject.isTooWeak = false;
-  }
-
-  response.set({ 'Content-Type': 'application/json' });                          // Response to be JSON format
-  response.send(JSON.stringify(returnObject));
-});
-
 
 /******************************************************************************/
 
@@ -269,3 +181,199 @@ router.post('/login/', (request, response, next) => {
 });
 
 module.exports = router;
+
+/******************************************************************************/
+
+/**
+ * Register new user
+ */
+
+router.post('/register_new_user/', async (request, response, next) => {
+  let okayToSubmit = true;
+
+  const checkField = async (field, values = request.body.userDetails) => {
+    // clone values object
+    const newObject = JSON.parse(JSON.stringify({ ...values[field] }));
+
+    /**
+     *  Test functions:
+     */
+    // Each function will update the current (field)'s values in the newObject
+    // according to the test results. The newObjects will be added to the
+    // newUserDetails object field by field.
+    const isRequired = (field) => {
+      let error = false;
+      if (values[field].required && !values[field].value) {
+        newObject.error = true;
+        newObject.message = 'This information is required to proceed';
+        error = true;
+        okayToSubmit = false;
+      } else {
+        newObject.error = false;
+        newObject.message = '';
+      }
+      return error;
+    };
+
+    const matchesPassword1 = (field) => {
+      let error = false;
+
+      if (values[field].value !== values.password1.value) {
+        newObject.error = true;
+        newObject.message = 'Passwords do not match';
+        error = true;
+        okayToSubmit = false;
+      } else {
+        newObject.error = false;
+        newObject.message = '';
+      }
+      return error;
+    };
+
+    const isPasswordStrongEnough = async (field) => {
+      let error = false;
+      const passwordCheckResult = utils.checkPasswordStrength(values[field].value);
+
+      if (passwordCheckResult.isTooWeak) {
+        newObject.error = true;
+        newObject.message = passwordCheckResult.errorMessage;
+        newObject.messageColor = 'red';
+        error = true;
+        okayToSubmit = false;
+      } else {
+        newObject.error = false;
+        newObject.message = '';
+        newObject.messageColor = 'red';
+      }
+
+      return error;
+    };
+
+    const isEmailFormat = (field) => {
+      let error = false;
+      if (!(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(values[field].value))) {
+        newObject.error = true;
+        newObject.message = 'You must enter a valid email address!';
+        error = true;
+        okayToSubmit = false;
+      } else {
+        newObject.error = false;
+        newObject.message = '';
+      }
+      return error;
+    };
+
+    const isEmailTaken = async field => {
+      let error = false;
+
+      await utils.checkEmailExists(values[field].value).then(response => {
+        if (response.result) {
+          newObject.error = true;
+          newObject.message = 'Email address is already taken';
+          error = true;
+          okayToSubmit = false;
+        } else {
+          newObject.error = false;
+          newObject.message = '';
+        }
+      });
+
+      return error;
+    };
+
+    const isUKPhoneNumberFormat = (field) => {
+      let error = false;
+      if (!(/^(?:0|\+?44)(?:\d\s?){9,10}$/.test(values[field].value)) && values[field].value.length > 0) {
+        newObject.error = true;
+        newObject.message = 'This is not a valid UK Phone Number!';
+        error = true;
+        okayToSubmit = false;
+      } else {
+        newObject.error = false;
+        newObject.message = '';
+      }
+      return error;
+    };
+
+    const hasDatePickerThrownErrors = (field) => {
+      let error = false;
+
+      if (values[field].value && values[field].pickerErrorMessage) {
+        newObject.error = true;
+        newObject.message = values[field].pickerErrorMessage;
+        error = true;
+        okayToSubmit = false;
+      } else {
+        newObject.error = false;
+        newObject.message = '';
+      }
+      return error;
+    };
+
+    // Allocate tests to fields
+    switch (field) {
+      case 'username':
+        if (isRequired(field)) break;
+        break;
+
+      case 'email':
+        if (isRequired(field)) break;
+        if (isEmailFormat(field)) break;
+        if (await isEmailTaken(field)) break;
+        break;
+
+      case 'phone':
+        if (isUKPhoneNumberFormat(field)) break;
+        break;
+
+      case 'dob':
+        if (hasDatePickerThrownErrors(field)) break;
+        break;
+
+      case 'address':
+        break;
+
+      case 'gender':
+        break;
+
+      case 'password1':
+        if (isRequired(field)) break;
+        if (await isPasswordStrongEnough(field)) break;
+        break;
+
+      case 'password2':
+        if (isRequired(field)) break;
+        if (matchesPassword1(field)) break;
+        break;
+    }
+
+    return newObject;
+  };
+
+  // Need to perform a deep clone of the values object then update the state
+  // hooks (setValues()) with the new object
+  const newUserDetails = {};
+
+  // Step through each field and build the new object
+  for (const field in request.body.userDetails) {
+    newUserDetails[field] = await checkField(field);
+  };
+
+  if (okayToSubmit) {
+    console.log('User details passed validation: ', newUserDetails);
+    response.set({ 'Content-Type': 'application/json' });                          // Response to be JSON format
+    response.send(JSON.stringify({
+      serverMessage: 'Validation checks passed, creating new user.',
+      err: false,
+      newUserDetails: newUserDetails
+    }));
+  } else {
+    response.set({ 'Content-Type': 'application/json' });                          // Response to be JSON format
+    response.send(JSON.stringify({
+      serverMessage: 'Validation checks failed!',
+      err: true,
+      newUserDetails: newUserDetails
+    }));
+  }
+
+});

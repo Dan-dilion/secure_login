@@ -28,6 +28,7 @@ const Register = (props) => {
   // De-structure logic
   const {
     classes,
+    theme,
     dispatch,
     setLoginOrRegister,
     values,
@@ -151,7 +152,13 @@ const Register = (props) => {
                 className={classes.helperMessage}
                 style={{
                   opacity: values.password1.error ? 1 : 0,
-                  color: values.password1.messageColor
+                  color: values.password1.messageColor === 'red'
+                    ? theme.palette.error.main
+                    : values.password1.messageColor === 'yellow'
+                      ? '#dd8f00'
+                      : values.password1.messageColor === 'green'
+                        ? '#089c00'
+                        : theme.palette.error.main
                 }}
               >{values.password1.message}</FormHelperText>
             </FormControl>
