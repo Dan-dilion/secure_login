@@ -13,3 +13,30 @@ export const queryDatabase = (query, token, callback) => {
     .then(results => { callback(results); })
     .catch(response => { console.log('Fetch Error: ', response); });
 };
+
+
+
+
+export const checkEmail = email => {
+
+  return fetch('http://localhost:8080/api/check_email/', {
+    method: 'post',
+    headers: {
+      Accept: 'application/json',                               // Allow JSON responses
+      'Content-Type': 'application/json'                        // Incoming data type to be JSON
+    },
+    body: JSON.stringify({ email: email })
+  })
+    .then(response => response.json());
+
+  // return new Promise((resolve, reject) => {
+  //   setTimeout(() => resolve({ result: true }), 1000);
+  // });
+
+
+  // .then(async response => {
+  //   console.log('Returning response: ', JSON.stringify(response.result));
+  //   return response;
+  //   // console.log('All Done!: ', JSON.stringify(response.result));
+  // });
+};

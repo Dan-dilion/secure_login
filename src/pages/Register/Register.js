@@ -33,6 +33,7 @@ const Register = (props) => {
     values,
     setValues,
     handleClickShowPassword,
+    onPasswordChange,
     handleSubmit,
     preventDefaultEvent
   } = RegisterLogic(props);
@@ -56,73 +57,75 @@ const Register = (props) => {
 
         <Container className={classes.inputsContainer}>
           <Container className={classes.leftPanel}>
-            <FormControl
+            <TextField
               className={classes.inputBoxs}
+              id="custom-username-TextField"
+              label="Username"
+              type="text"
               error={values.username.error}
-            >
-              <InputLabel htmlFor="custom-username-TextField">Username</InputLabel>
-              <Input
-                id="custom-username-TextField"
-                type="text"
-                value={values.username.value}
-                onChange={event => setValues({
+              helperText={values.username.message}
+              value={values.username.value}
+              onChange={event => setValues({
+                ...values,
+                username: {
+                  ...values.username,
+                  value: event.target.value,
+                  error: false,
+                  message: ''
+                }
+              })}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                      <AccountCircle className={classes.inputIcon} />
+                  </InputAdornment>
+                )
+              }}
+              FormHelperTextProps={{
+                className: classes.helperMessage,
+                style: {
+                  opacity: values.username.error ? 1 : 0,
+                  position: 'absolute',
+                  top: '100%'
+                }
+              }}
+            />
+
+            <TextField
+              className={classes.inputBoxs}
+              id="custom-email-TextField"
+              label="Email"
+              type="email"
+              error={values.email.error}
+              helperText={values.email.message}
+              value={values.email.value}
+              onChange={event => {
+                setValues({
                   ...values,
-                  username: {
-                    ...values.username,
+                  email: {
+                    ...values.email,
                     value: event.target.value,
                     error: false,
                     message: ''
                   }
-                })}
-                endAdornment = {
-                  <InputAdornment position="end">
-                      <AccountCircle className={classes.inputIcon} />
-                  </InputAdornment>
-                }
-              />
-              <FormHelperText
-                style={{
-                  opacity: values.username.error ? 1 : 0,
-                  position: 'absolute',
-                  top: '100%'
-                }}
-              >{values.username.message}</FormHelperText>
-            </FormControl>
-
-            <FormControl
-              className={classes.inputBoxs}
-              error={values.email.error}
-            >
-              <InputLabel htmlFor="custom-email-TextField">Email</InputLabel>
-              <Input
-                id="custom-email-TextField"
-                type="email"
-                value={values.email.value}
-                onChange={event => {
-                  setValues({
-                    ...values,
-                    email: {
-                      ...values.email,
-                      value: event.target.value,
-                      error: false,
-                      message: ''
-                    }
-                  });
-                }}
-                endAdornment= {
+                });
+              }}
+              InputProps={{
+                endAdornment: (
                   <InputAdornment position="end">
                       <Email className={classes.inputIcon} />
                   </InputAdornment>
-                }
-              />
-            <FormHelperText
-              style={{
-                opacity: values.email.error ? 1 : 0,
-                position: 'absolute',
-                top: '100%'
+                )
               }}
-            >{values.email.message}</FormHelperText>
-            </FormControl>
+              FormHelperTextProps={{
+                className: classes.helperMessage,
+                style: {
+                  opacity: values.email.error ? 1 : 0,
+                  position: 'absolute',
+                  top: '100%'
+                }
+              }}
+            />
 
             <FormControl className={classes.inputBoxs} error={values.password1.error}>
               <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
@@ -130,15 +133,7 @@ const Register = (props) => {
                 id="standard-adornment-password"
                 type={values.password1.showPasswords ? 'text' : 'password'}
                 value={values.password1.value}
-                onChange={event => setValues({
-                  ...values,
-                  password1: {
-                    ...values.password1,
-                    value: event.target.value,
-                    error: false,
-                    message: ''
-                  }
-                })}
+                onChange={event => onPasswordChange(event.target.value)}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -153,10 +148,10 @@ const Register = (props) => {
                 }
               />
               <FormHelperText
+                className={classes.helperMessage}
                 style={{
                   opacity: values.password1.error ? 1 : 0,
-                  position: 'absolute',
-                  top: '100%'
+                  color: values.password1.messageColor
                 }}
               >{values.password1.message}</FormHelperText>
             </FormControl>
@@ -193,10 +188,9 @@ const Register = (props) => {
                 }
               />
               <FormHelperText
+                className={classes.helperMessage}
                 style={{
-                  opacity: values.password2.error ? 1 : 0,
-                  position: 'absolute',
-                  top: '100%'
+                  opacity: values.password2.error ? 1 : 0
                 }}
               >{values.password2.message}</FormHelperText>
             </FormControl>
@@ -229,6 +223,7 @@ const Register = (props) => {
                 )
               }}
               FormHelperTextProps={{
+                className: classes.helperMessage,
                 style: {
                   opacity: values.phone.error ? 1 : 0,
                   position: 'absolute',
@@ -271,24 +266,40 @@ const Register = (props) => {
               minDate={new Date('1900')}
               minDateMessage={"C'mon! No one is that old!!!"}
               maxDateMessage={'DOB cannot exceed todays date!'}
-              invalidDateMessage={'Invalid date format! Please enter DD/MM/YYYY'}
+              invalidDateMessage={'Invalid date!'}
               autoOk={true}
               animateYearScrolling={true}
               error={values.dob.error}
               helperText={values.dob.message}
               value={values.dob.value}
-              label="Date Of Birth"
+              label="Date Of Birth (dd/mm/yyyy)"
+              onError={(error, date) => {
+                if (error !== values.dob.pickerErrorMessage) {
+                  console.log('Register - datePicker - onError: ', error, date);
+                  setValues({
+                    ...values, dob: { ...values.dob, value: date, pickerErrorMessage: error }
+                  });
+                }
+              }}
               onChange={date => setValues({
                 ...values,
                 dob: {
                   ...values.dob,
-                  value: date,
+                  value: (date instanceof Date && !isNaN(date.valueOf())) ? date : JSON.stringify(date),
                   error: false,
                   message: ''
                 }
               })}
               format="dd/MM/yyyy"
               KeyboardButtonProps={{ edge: 'end' }}
+              FormHelperTextProps={{
+                className: classes.helperMessage,
+                style: {
+                  opacity: values.dob.error ? 1 : 0,
+                  position: 'absolute',
+                  top: '100%'
+                }
+              }}
             />
 
             <FormControl
@@ -315,10 +326,9 @@ const Register = (props) => {
                 <MenuItem value={30}>Prefer not to say</MenuItem>
               </Select>
               <FormHelperText
+                className={classes.helperMessage}
                 style={{
-                  opacity: values.gender.error ? 1 : 0,
-                  position: 'absolute',
-                  top: '100%'
+                  opacity: values.gender.error ? 1 : 0
                 }}
               >{values.gender.message}</FormHelperText>
 

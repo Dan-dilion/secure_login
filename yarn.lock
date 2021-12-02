@@ -8853,6 +8853,11 @@
   "resolved" "https://registry.npmjs.org/os-browserify/-/os-browserify-0.3.0.tgz"
   "version" "0.3.0"
 
+"owasp-password-strength-test@^1.3.0":
+  "integrity" "sha1-T2KeQpA+j20nmyMNZXq2HljkSxI="
+  "resolved" "https://registry.npmjs.org/owasp-password-strength-test/-/owasp-password-strength-test-1.3.0.tgz"
+  "version" "1.3.0"
+
 "p-cancelable@^1.0.0":
   "integrity" "sha512-s73XxOZ4zpt1edZYZzvhqFa6uvQc1vwUa0K0BdtIZgQMAJj9IbebH+JkgKZc9h+B05PKHLOTl4ajG1BmNrVZlw=="
   "resolved" "https://registry.npmjs.org/p-cancelable/-/p-cancelable-1.1.0.tgz"

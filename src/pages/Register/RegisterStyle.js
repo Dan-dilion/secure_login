@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
   },
   inputBoxs: {
     width: '100%',
-    margin: theme.spacing(1),
+    margin: theme.spacing(2),
     marginLeft: 0,
     marginRight: 0
     // width: '25ch',
@@ -43,6 +43,11 @@ const useStyles = makeStyles(theme => ({
   inputIcon: {
     color: 'black',
     opacity: 0.54
+  },
+  helperMessage: {
+    position: 'absolute',
+    top: '100%',
+    lineHeight: '1.2em'
   }
 }));
 

@@ -44,3 +44,15 @@ export const verifyUser = (token, callBack) => {
     callBack(false);
   }
 };
+
+export const checkPassword = pwd => {
+  return fetch('http://localhost:8080/api/check_password_strength/', {
+    method: 'post',
+    headers: {
+      Accept: 'application/json',                               // Allow JSON responses
+      'Content-Type': 'application/json'                        // Incoming data type to be JSON
+    },
+    body: JSON.stringify({ password: pwd })
+  })
+    .then(response => response.json());
+};

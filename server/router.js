@@ -3,6 +3,7 @@ const router = express.Router();
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const owasp = require('owasp-password-strength-test');
 
 const db = require('./db.js');
 const jwtConfig = require('./jwtConfig.js');
@@ -38,7 +39,7 @@ router.post('/verify_user/', middleware.isLoggedIn, (request, response, next) =>
 /******************************************************************************/
 
 /**
- *  Query Database
+ *  Query Database - Secure
  */
 router.post('/query_DB/', middleware.isLoggedIn, (request, response, next) => {
 
@@ -51,31 +52,23 @@ router.post('/query_DB/', middleware.isLoggedIn, (request, response, next) => {
   }
 
   // POST parameters are accessible via the request object
-  console.log(JSON.stringify(statement));
-
-  console.log('1 -- query_DB Request triggered');
-
-  // The post response is sent in as a call back for the sql query promise
   const resolveQuery = (output) => {
     response.set({ 'Content-Type': 'application/json' });                          // Response to be JSON format
     response.send(JSON.stringify({ verified: true, results: output }));
-    console.log('3 -- This promise has been concluded Positively: \nResults: ', JSON.stringify(output));
   };
 
   const rejectQuery = (output) => {
     response.set({ 'Content-Type': 'application/json' });
     response.send(JSON.stringify('Something went terribly wrong!!! ' + output));
-    console.log('3 -- This promise has been concluded negatively: ', JSON.stringify(output));
   };
 
-  // queryDatabase returns a promise allowing the usage of the .then() method,
-  // resolve and reject are passed in to the .then() statement
   const queryDatabase = (query) => new Promise((resolve, reject) => {
     db.query(query, (err, result, fields) => {
       if (err) {
-        console.log('2 -- DB Error!', err);
         reject(new Error('Database Error!!! ' + err));
-      } else { console.log('2 -- all good'); resolve(result); }
+      } else {
+        resolve(result);
+      }
     });
   });
 
@@ -83,6 +76,111 @@ router.post('/query_DB/', middleware.isLoggedIn, (request, response, next) => {
 });
 
 
+
+/******************************************************************************/
+/**
+ *  Check Email Exists
+ */
+
+router.post('/check_email/', (request, response, next) => {
+  const checkEmailQuery = 'SELECT * FROM node_login.users WHERE email = ?';
+
+  const resolveQuery = result => {
+    response.set({ 'Content-Type': 'application/json' });                          // Response to be JSON format
+    response.send(JSON.stringify({ result: result.length > 0 }));
+  };
+
+  const rejectQuery = result => {
+    response.send(JSON.stringify('Something went terribly wrong!!! ' + result));
+  };
+
+  const queryDatabase = query => new Promise((resolve, reject) => {
+    db.query(query, [request.body.email], (err, result, fields) => {
+      if (err) {
+        reject(new Error('Database Error!!! ' + err));
+      } else {
+        resolve(result);
+      }
+    });
+  });
+
+  queryDatabase(checkEmailQuery).then(resolveQuery, rejectQuery);
+});
+
+/******************************************************************************/
+
+/**
+ * Check Password Strength
+ */
+
+ /**
+  *  Password Tests:
+  *  0 - (Required) Must be above min length
+  *  1 - (Required) Must be below max length
+  *  2 - (Required) Forbid repeating letters (3 or more)
+  *  3 - (Optional) Must have at least 1 lowercase letter
+  *  4 - (Optional) Must have at least 1 uppercase letter
+  *  5 - (Optional) Must have at least 1 number
+  *  6 - (Optional) Must have at least 1 special character
+  */
+
+router.post('/check_password_strength/', (request, response, next) => {
+
+  const returnObject = {
+    isTooWeak: true,
+    errorMessage: ''
+  };
+
+  owasp.config({
+    allowPassphrases: true,
+    maxLength: 128,   // Protect against long password DDOS attack
+    minLength: 8,
+    minPhraseLength: 20,
+    minOptionalTestsToPass: 4
+  });
+
+  const testResults = owasp.test(request.body.password);
+
+  const optionalTestMessage = () => {
+    let testCount = 0;
+    let message = 'Password is too weak, try adding';
+
+    const appendMessage = addition => {
+      message += `${testCount > 1 ? ' or ' : ''} a`;
+      message += addition;
+    };
+
+    if (!testResults.passedTests.includes(3)) {
+      testCount++;
+      appendMessage(' lowercase letter');
+    }
+    if (!testResults.passedTests.includes(4)) {
+      testCount++;
+      appendMessage('n uppercase letter');
+    }
+    if (!testResults.passedTests.includes(5)) {
+      testCount++;
+      appendMessage(' number');
+    }
+    if (!testResults.passedTests.includes(6)) {
+      testCount++;
+      appendMessage(' special character');
+    }
+
+    return message;
+  };
+
+  if (testResults.requiredTestErrors.length > 0) {
+    returnObject.errorMessage = testResults.requiredTestErrors[0];
+  } else if (testResults.optionalTestsPassed <= 2) {
+    returnObject.errorMessage = optionalTestMessage();
+  } else {
+    returnObject.isTooWeak = false;
+  }
+
+  response.set({ 'Content-Type': 'application/json' });                          // Response to be JSON format
+  response.send(JSON.stringify(returnObject));
+});
 
 
 /******************************************************************************/

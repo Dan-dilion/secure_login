@@ -41,6 +41,7 @@
       "always"
     ],
     "no-unused-vars": "warn",
-    "padded-blocks": 0
+    "padded-blocks": 0,
+    "no-constant-condition": "warn"
   }
 }
