@@ -282,9 +282,13 @@ const Register = (props) => {
               label="Date Of Birth (dd/mm/yyyy)"
               onError={(error, date) => {
                 if (error !== values.dob.pickerErrorMessage) {
-                  console.log('Register - datePicker - onError: ', error, date);
                   setValues({
-                    ...values, dob: { ...values.dob, value: date, pickerErrorMessage: error }
+                    ...values,
+                    dob: {
+                      ...values.dob,
+                      value: date,
+                      pickerErrorMessage: error
+                    }
                   });
                 }
               }}
@@ -292,7 +296,9 @@ const Register = (props) => {
                 ...values,
                 dob: {
                   ...values.dob,
-                  value: (date instanceof Date && !isNaN(date.valueOf())) ? date : JSON.stringify(date),
+                  value: (date instanceof Date && !isNaN(date.valueOf()))
+                    ? date
+                    : JSON.stringify(date),
                   error: false,
                   message: ''
                 }

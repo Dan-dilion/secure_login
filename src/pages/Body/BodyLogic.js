@@ -11,7 +11,9 @@ const BodyLogic = ({ query }) => {
 
   const pressMeCallBack = results => {
     results.verified
-      ? dispatch(setSqlResults(results.results))
+      ? results.error
+        ? dispatch(setSqlResults([{ Error: results.message }]))
+        : dispatch(setSqlResults(results.results))
       : dispatch(setVerifiedToken(results.verified));
   };
 

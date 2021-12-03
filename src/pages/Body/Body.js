@@ -8,7 +8,7 @@ import {
 
 import BodyLogic from './BodyLogic.js';
 import UserDetailsTable from './Components/UserDetailsTable/';
-import { queryDatabase } from '../../server_requests/queryDatabase.js';
+import { getUserDetails } from '../../server_requests/queryDatabase.js';
 
 const Body = props => {
   // De-structure logic
@@ -19,7 +19,7 @@ const Body = props => {
   } = BodyLogic(props);
 
   useEffect(() => {
-    queryDatabase('get_user_details', loggedIn.jwt, results => pressMeCallBack(results));
+    getUserDetails(loggedIn.jwt).then(results => pressMeCallBack(results));
   }, []);
 
   return (
