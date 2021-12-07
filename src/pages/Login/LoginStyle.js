@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
   heading: {
     margin: '1.5rem 0'
   },
-  userNameIcon: {
+  emailAddressIcon: {
     color: 'black',
     opacity: 0.54
   },

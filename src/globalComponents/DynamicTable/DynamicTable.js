@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   TableContainer,
-  Paper,
   Table,
   TableHead,
   TableRow,

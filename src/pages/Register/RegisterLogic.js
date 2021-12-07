@@ -1,80 +1,31 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@material-ui/styles';
+import { Slide } from '@material-ui/core';
+import { useSnackbar } from 'notistack';
 import owasp from 'owasp-password-strength-test';
 
-import { checkEmail } from '../../server_requests/queryDatabase.js';
-import { checkPassword, registerUser } from '../../server_requests/securityRequests.js';
+import { registerUser } from '../../server_requests/securityRequests.js';
 import { setLoginOrRegister } from '../../App/AppSlice.js';
+import { setLoginForm } from '../Login/loginSlice.js';
+import { setRegisterForm } from './registerSlice.js';
 import useStyles from './RegisterStyle.js';
 
 const RegisterLogic = ({ ...props }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const values = useSelector(state => state.register.registerForm);
   const theme = useTheme();
+  const { enqueueSnackbar } = useSnackbar();
+  const [showPasswords, setShowPasswords] = useState(false);
 
-  const defaultValues = {
-    username: {
-      value: '',
-      error: false,
-      message: '',
-      required: true
-    },
-    email: {
-      value: '',
-      error: false,
-      message: '',
-      required: true
-    },
-    phone: {
-      value: '',
-      error: false,
-      message: '',
-      required: false
-    },
-    dob: {
-      value: null,
-      error: false,
-      message: '',
-      pickerErrorMessage: '',
-      required: false
-    },
-    address: {
-      value: '',
-      error: false,
-      message: '',
-      required: false
-    },
-    gender: {
-      value: '',
-      error: false,
-      message: '',
-      required: false
-    },
-    password1: {
-      value: '',
-      error: false,
-      message: '',
-      messageColor: 'red',
-      showPasswords: false,
-      required: true
-    },
-    password2: {
-      value: '',
-      error: false,
-      message: '',
-      required: true
-    }
+  const setValues = (newValues) => {
+    dispatch(setRegisterForm(newValues));
   };
 
-  const [values, setValues] = useState(defaultValues);
-
-  const handleClickShowPassword = () => {
-    setValues({ ...values, password1: { ...values.password1, showPasswords: !values.password1.showPasswords } });
-  };
+  const handleClickShowPassword = () => { setShowPasswords(!showPasswords); };
 
   const onPasswordChange = value => {
-
     /**
      *  Password Tests:
      *  0 - (Required) Must be above min length
@@ -118,12 +69,8 @@ const RegisterLogic = ({ ...props }) => {
   };
 
   const handleSubmit = async event => {
-
-    // const handleRegistrationErrors = errors => {
-    //   console.log('registerLogic - handleRegistrationErrors - errors: ', errors);
-    // };
-
     event.preventDefault();
+
     await registerUser({
       username: values.username,
       email: values.email,
@@ -134,8 +81,29 @@ const RegisterLogic = ({ ...props }) => {
       password1: values.password1,
       password2: values.password2
     }).then(response => {
-      console.log('NewValues here: ', response);
-      setValues(response.newUserDetails);
+      if (response.err) {
+        enqueueSnackbar(response.serverMessage, {
+          variant: 'error',
+          anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'center'
+          },
+          TransitionComponent: Slide
+        });
+        setValues(response.newUserDetails);
+      } else {
+        enqueueSnackbar(response.serverMessage, {
+          variant: 'success',
+          anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'center'
+          },
+          TransitionComponent: Slide
+        });
+        setValues(response.newUserDetails);
+        dispatch(setLoginForm({ emailAddress: response.newUserDetails.email.value, password: '' }));
+        dispatch(setLoginOrRegister(true));
+      }
     });
   };
 
@@ -150,6 +118,7 @@ const RegisterLogic = ({ ...props }) => {
     setLoginOrRegister,
     values,
     setValues,
+    showPasswords,
     handleClickShowPassword,
     onPasswordChange,
     handleSubmit,

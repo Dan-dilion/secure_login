@@ -1,7 +1,7 @@
 const owasp = require('owasp-password-strength-test');
 const bcrypt = require('bcryptjs');
 
-const databaseAccess = require('./databaseAccess.js');
+const db = require('./config/dbConfig.js');
 
 /**
  * Check Password Strength
@@ -80,9 +80,6 @@ const checkPasswordStrength = (pwd) => {
  */
 const comparePasswordHash = async (password, hash) => {
 
-  console.log('Password Hash: ', hash);
-  console.log('Password: ', password);
-
   return await bcrypt.compare(password, hash).then(response => {
     let returnObject = {
       success: false,
@@ -91,7 +88,7 @@ const comparePasswordHash = async (password, hash) => {
 
     // Wrong Username
     response
-      ? returnObject = { success: true, message: 'Username and password correct' }
+      ? returnObject = { success: true, message: 'Username and password accepted' }
       : returnObject = { success: false, message: 'Username Or Password Incorrect!' };
 
     return returnObject;
@@ -99,12 +96,21 @@ const comparePasswordHash = async (password, hash) => {
 };
 
 /******************************************************************************/
+/**
+ * Hash Password
+ */
 
+const hashPassword = password => {
+  return bcrypt.hash(password, 10).then(hash => hash);
+};
+
+
+/******************************************************************************/
 /**
  * Check Fields Integrity
  */
 //
-const checkUserDetails = async userDetails => {
+const validateUserDetails = async userDetails => {
 
   const returnObject = {
     okayToSubmit: true,
@@ -186,7 +192,7 @@ const checkUserDetails = async userDetails => {
     const isEmailTaken = async field => {
       let error = false;
 
-      await databaseAccess.checkEmailExists(userDetails[field].value).then(response => {
+      await checkEmailExists(userDetails[field].value).then(response => {
         if (!response.err) {
           if (response.result) {
             newObject.error = true;
@@ -282,4 +288,125 @@ const checkUserDetails = async userDetails => {
   return returnObject;
 };
 
-module.exports = { comparePasswordHash, checkUserDetails };
+
+/******************************************************************************/
+/**
+ * Check Login Details
+ */
+
+const checkLoginDetails = async (emailAddress, password) => {
+  const statement = 'SELECT * FROM node_login.users WHERE email = ?;';
+
+  const queryDatabase = query => new Promise((resolve, reject) => {
+    db.query(query, [emailAddress], (err, result, fields) => {
+      if (err) reject(new Error('DB query failed: ' + err.code + ': ' + err.sqlMessage));
+      else resolve(result);
+    });
+  });
+
+  return await queryDatabase(statement)
+    .then(async result => {
+      if (result.length > 0) {
+        const verifyPasswordHashResults = await comparePasswordHash(password, result[0].password);
+        return { ...verifyPasswordHashResults, result: result };
+      } else return { success: false, message: 'Email or Password Incorrect!', result: [] };
+    });
+};
+
+/******************************************************************************/
+
+/**
+ * Set Last Logged In Time & Date
+ */
+
+const setLastLoggedInTime = id => {
+  db.query(`UPDATE users SET datelastlogin = now() WHERE id = '${id}'`);
+};
+
+
+/******************************************************************************/
+
+/**
+ * Check database for email address
+ */
+
+const checkEmailExists = email => {
+  const checkEmailQuery = 'SELECT * FROM node_login.users WHERE email = ?';
+
+  const queryDatabase = query => new Promise((resolve, reject) => {
+    db.query(query, [email], (err, result, fields) => {
+      if (err) reject(new Error('DB query failed: ' + err.code + ': ' + err.sqlMessage));
+      else resolve(result);
+    });
+  });
+
+  return queryDatabase(checkEmailQuery)
+    .then(result => result.length > 0
+      ? ({ result: true, err: false })
+      : ({ result: false, err: false })
+    )
+    .catch(error => ({ err: true, errMessage: error.toString() }));
+};
+
+/******************************************************************************/
+
+/**
+ * Get User Details
+ */
+
+const getUserDetails = () => {
+  const statement = 'SELECT id, username, password, email FROM node_login.users';
+
+  const queryDatabase = query => new Promise((resolve, reject) => {
+    db.query(query, (err, result, fields) => {
+      err
+        ? reject(new Error('DB query failed: ' + err.code + ': ' + err.sqlMessage))
+        : resolve(result);
+    });
+  });
+
+  return queryDatabase(statement)
+    .then(result => ({ verified: true, error: false, results: result }))
+    .catch(error => ({ verified: true, error: true, message: error.toString() }));
+};
+
+/******************************************************************************/
+/**
+ * Add New User Details
+ */
+
+const addNewUser = (details) => {
+  console.log('Hashed Password: ', details.password1.hash);
+  const statement = 'INSERT INTO node_login.users(username, email, password, phone, address, dob, gender) VALUES (?, ?, ?, ?, ?, ?, ?);';
+  const queryDatabase = query => new Promise((resolve, reject) => {
+    db.query(query, [
+      details.username.value,
+      details.email.value,
+      details.password1.hash,
+      details.phone.value ? details.phone.value : null,
+      details.address.value ? details.address.value : null,
+      details.dob.value ? details.dob.value : null,
+      details.gender.value ? details.gender.value : null
+    ], (err, result, fields) => {
+      err
+        ? reject(new Error(`DB error!: ${err.code}: ${err.sqlMessage}`))
+        : resolve(result);
+    });
+  });
+
+  return queryDatabase(statement)
+    .then(response => ({ err: false, message: 'User registration complete' }))
+    .catch(error => ({ err: true, message: `An error occurred while adding users to the database: ${error}` }));
+};
+
+
+module.exports = {
+  comparePasswordHash,
+  hashPassword,
+  validateUserDetails,
+  checkLoginDetails,
+  setLastLoggedInTime,
+  checkEmailExists,
+  getUserDetails,
+  addNewUser
+};

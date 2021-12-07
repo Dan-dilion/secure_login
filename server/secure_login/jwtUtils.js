@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const jwtConfig = require('./jwtConfig.js');
+const jwtConfig = require('./config/jwtConfig.js');
 
 console.log('JWT Config: ', jwtConfig);
 

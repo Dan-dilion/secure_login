@@ -1,5 +1,5 @@
 import { createTheme } from '@material-ui/core/styles';
-import { purple, deepPurple } from '@material-ui/core/colors';
+import { lightBlue, indigo } from '@material-ui/core/colors';
 
 // See the complete theme object here: https://material-ui.com/customization/default-theme/
 export const theme = createTheme({
@@ -10,8 +10,8 @@ export const theme = createTheme({
     //   dark: '#311b92',
     //   contrastText: '#fff'
     // },
-    primary: deepPurple,
-    secondary: purple,
+    primary: indigo,
+    secondary: lightBlue,
     action: { hoverOpacity: 0.2 }
   },
   overrides: {

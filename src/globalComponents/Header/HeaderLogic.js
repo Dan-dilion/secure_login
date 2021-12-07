@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -10,6 +11,22 @@ const HeaderLogic = () => {
   const dispatch = useDispatch();
   const verifiedLogin = useSelector(state => state.login.loggedIn.verified);
   const headerSelection = useSelector(state => state.app.headerSelection);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const userMenuOptions = [
+    'Logout'
+  ];
+
+  const handleUserMenuSelect = (option) => {
+    switch (option) {
+      case 'Logout': {
+        console.log('Logging out');
+        break;
+      }
+      default: break;
+    }
+    setAnchorEl(null);
+  };
 
   const handleChange = (routeName) => {
     console.log('Header routeName: ', routeName);
@@ -22,9 +39,13 @@ const HeaderLogic = () => {
 
   return {
     classes,
+    anchorEl,
+    setAnchorEl,
     handleChange,
     verifiedLogin,
-    headerSelection
+    headerSelection,
+    userMenuOptions,
+    handleUserMenuSelect
   };
 };
 

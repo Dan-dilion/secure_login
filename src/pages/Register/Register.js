@@ -33,6 +33,7 @@ const Register = (props) => {
     setLoginOrRegister,
     values,
     setValues,
+    showPasswords,
     handleClickShowPassword,
     onPasswordChange,
     handleSubmit,
@@ -132,7 +133,7 @@ const Register = (props) => {
               <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
               <Input
                 id="standard-adornment-password"
-                type={values.password1.showPasswords ? 'text' : 'password'}
+                type={showPasswords ? 'text' : 'password'}
                 value={values.password1.value}
                 onChange={event => onPasswordChange(event.target.value)}
                 endAdornment={
@@ -143,7 +144,7 @@ const Register = (props) => {
                       onMouseDown={preventDefaultEvent}
                       edge="end"
                     >
-                      {values.password1.showPasswords ? <Visibility /> : <VisibilityOff />}
+                      {showPasswords ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
                 }
@@ -170,7 +171,7 @@ const Register = (props) => {
               <InputLabel htmlFor="standard-adornment-password">Confirm Password</InputLabel>
               <Input
                 id="standard-adornment-password"
-                type={values.password1.showPasswords ? 'text' : 'password'}
+                type={showPasswords ? 'text' : 'password'}
                 value={values.password2.value}
                 onChange={event => setValues({
                   ...values,
@@ -189,7 +190,7 @@ const Register = (props) => {
                       onMouseDown={preventDefaultEvent}
                       edge="end"
                     >
-                      {values.password1.showPasswords ? <Visibility /> : <VisibilityOff />}
+                      {showPasswords ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
                 }
@@ -292,13 +293,11 @@ const Register = (props) => {
                   });
                 }
               }}
-              onChange={date => setValues({
+              onChange={(date, isFinish) => isFinish && setValues({
                 ...values,
                 dob: {
                   ...values.dob,
-                  value: (date instanceof Date && !isNaN(date.valueOf()))
-                    ? date
-                    : JSON.stringify(date),
+                  value: `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`,
                   error: false,
                   message: ''
                 }
@@ -334,9 +333,9 @@ const Register = (props) => {
                   }
                 })}
               >
-                <MenuItem value={10}>Male</MenuItem>
-                <MenuItem value={20}>Female</MenuItem>
-                <MenuItem value={30}>Prefer not to say</MenuItem>
+                <MenuItem value={'Male'}>Male</MenuItem>
+                <MenuItem value={'Female'}>Female</MenuItem>
+                <MenuItem value={'Prefer not to say'}>Prefer not to say</MenuItem>
               </Select>
               <FormHelperText
                 className={classes.helperMessage}

@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { SnackbarProvider } from 'notistack';
 import DateFnsAdapter from '@date-io/date-fns';
 
 import './index.css';
@@ -27,10 +28,12 @@ ReactDOM.render(
   <BrowserRouter basename = {process.env.PUBLIC_URL}>
     <MuiPickersUtilsProvider utils={DateFnsAdapter}>
       <MuiThemeProvider theme={theme}>
-        <Provider store={store}>
-          <CssBaseline />
-          <App />
-        </Provider>
+        <SnackbarProvider maxSnack={3}>
+          <Provider store={store}>
+            <CssBaseline />
+            <App />
+          </Provider>
+        </SnackbarProvider>
       </MuiThemeProvider>
     </MuiPickersUtilsProvider>
   </BrowserRouter>,

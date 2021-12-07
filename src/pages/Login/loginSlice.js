@@ -1,6 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const defaultState = {
+  loginForm: {
+    emailAddress: '',
+    password: ''
+  },
   loggedIn: {
     msg: '',
     verified: false,
@@ -21,6 +25,9 @@ const loginSlice = createSlice({
   name: 'login',
   initialState: defaultState,
   reducers: {
+    setLoginForm(state, action) {
+      state.loginForm = action.payload;
+    },
     setLoggedIn(state, action) {
       state.loggedIn = action.payload;
     },
@@ -34,6 +41,7 @@ const loginSlice = createSlice({
 });
 
 export const {
+  setLoginForm,
   setLoggedIn,
   setVerifiedToken,
   setLoggedInButWaitingToVerify

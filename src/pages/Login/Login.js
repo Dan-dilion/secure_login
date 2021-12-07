@@ -13,10 +13,11 @@ import {
   IconButton
 } from '@material-ui/core';
 import {
-  AccountCircle,
+  AlternateEmail,
   Visibility,
   VisibilityOff
 } from '@material-ui/icons';
+
 
 import LoginLogic from './LoginLogic.js';   // Page logic
 
@@ -28,6 +29,7 @@ const Login = props => {
     setLoginOrRegister,
     dispatch,
     values,
+    showPassword,
     handleChange,
     handleClickShowPassword,
     handleMouseDownPassword,
@@ -53,16 +55,16 @@ const Login = props => {
                   className={classes.inputBox}
                   variant="outlined"
                   color="primary"
-                  label={'Username'}
-                  type="text"
-                  value={values.userName}
-                  name="userName"
-                  onChange={handleChange('userName')}
+                  label={'Email'}
+                  type="email"
+                  value={values.emailAddress}
+                  name="emailAddress"
+                  onChange={handleChange('emailAddress')}
                   fullWidth
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
-                          <AccountCircle className={classes.userNameIcon} />
+                          <AlternateEmail className={classes.emailAddressIcon} />
                       </InputAdornment>
                     )
                   }}
@@ -72,7 +74,7 @@ const Login = props => {
                   <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                   <OutlinedInput
                     id="outlined-adornment-password"
-                    type={values.showPassword ? 'text' : 'password'}
+                    type={showPassword ? 'text' : 'password'}
                     value={values.password}
                     onChange={handleChange('password')}
                     labelWidth={70}
@@ -84,7 +86,7 @@ const Login = props => {
                           onMouseDown={handleMouseDownPassword}
                           edge="end"
                         >
-                          {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
                         </IconButton>
                       </InputAdornment>
                     }

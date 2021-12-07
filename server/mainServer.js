@@ -1,5 +1,5 @@
 const cors = require('cors');
-const router = require('./router.js');
+const router = require('./secure_login/router.js');
 const express = require('express');
 const app = express();
 
@@ -13,5 +13,5 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
-app.use('/api', router);
-app.listen(8080);
+app.use('/secure_login/api', router);
+app.listen(8987);

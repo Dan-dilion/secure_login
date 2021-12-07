@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const jwtUtils = require('./jwtUtils.js');
-const serverUtils = require('./serverUtils');
-const databaseAccess = require('./databaseAccess.js');
+const databaseUtils = require('./databaseUtils.js');
 
 /**
  *  Verify User
@@ -36,7 +35,7 @@ router.post('/verify_user/', jwtUtils.verifyLogin, (request, response, next) => 
  *  Query Database - Secure
  */
 router.post('/get_user_details/', jwtUtils.verifyLogin, (request, response, next) => {
-  databaseAccess.getUserDetails().then(result => {
+  databaseUtils.getUserDetails().then(result => {
     response.set({ 'Content-Type': 'application/json' });                       // Response to be JSON format
     response.send(JSON.stringify(result));
   });
@@ -50,7 +49,7 @@ router.post('/get_user_details/', jwtUtils.verifyLogin, (request, response, next
  */
 
 router.post('/check_email/', (request, response, next) => {
-  databaseAccess.checkEmailExists(request.body.email).then(result => {
+  databaseUtils.checkEmailExists(request.body.email).then(result => {
     response.set({ 'Content-Type': 'application/json' });                       // Response to be JSON format
     response.send(JSON.stringify(result));
   });
@@ -65,7 +64,7 @@ router.post('/login/', async (request, response, next) => {
   const resolveLogin = verifiedObject => {
     const token = jwtUtils.generateNewToken(verifiedObject.result[0].username, verifiedObject.result[0].id);
 
-    databaseAccess.setLastLoggedInTime(verifiedObject.result[0].id);
+    databaseUtils.setLastLoggedInTime(verifiedObject.result[0].id);
 
     response.send(JSON.stringify({
       verified: true,
@@ -85,7 +84,7 @@ router.post('/login/', async (request, response, next) => {
     console.log('Login concluded negatively: ', verifiedObject.message);
   };
 
-  await databaseAccess.checkLoginDetails(request.body.userName, request.body.password)
+  await databaseUtils.checkLoginDetails(request.body.emailAddress, request.body.password)
     .then(verifiedObject => {
       verifiedObject.success ? resolveLogin(verifiedObject) : rejectLogin(verifiedObject);
     });
@@ -101,20 +100,32 @@ module.exports = router;
 
 router.post('/register_new_user/', async (request, response, next) => {
 
-  const verifiedUserDetailsObject = await serverUtils.checkUserDetails(request.body.userDetails);
-
+  const verifiedUserDetailsObject = await databaseUtils.validateUserDetails(request.body.userDetails);
+  console.log('Usere Details Here: ', verifiedUserDetailsObject);
   if (verifiedUserDetailsObject.okayToSubmit) {
-    console.log('User details passed validation: ', verifiedUserDetailsObject.newUserDetails);
-    response.set({ 'Content-Type': 'application/json' });                          // Response to be JSON format
-    response.send(JSON.stringify({
-      serverMessage: 'Validation checks passed, creating new user.',
-      err: false,
-      newUserDetails: verifiedUserDetailsObject.newUserDetails
-    }));
+    verifiedUserDetailsObject.newUserDetails.password1.hash = await databaseUtils.hashPassword(verifiedUserDetailsObject.newUserDetails.password1.value);
+    databaseUtils.addNewUser(verifiedUserDetailsObject.newUserDetails)
+      .then(outcome => {
+        if (outcome.err) {
+          response.set({ 'Content-Type': 'application/json' });                          // Response to be JSON format
+          response.send(JSON.stringify({
+            serverMessage: `Validation passed, ${outcome.message}`,
+            err: true,
+            newUserDetails: verifiedUserDetailsObject.newUserDetails
+          }));
+        } else {
+          response.set({ 'Content-Type': 'application/json' });                          // Response to be JSON format
+          response.send(JSON.stringify({
+            serverMessage: `Success! ${outcome.message}`,
+            err: false,
+            newUserDetails: verifiedUserDetailsObject.newUserDetails
+          }));
+        }
+      });
   } else {
     response.set({ 'Content-Type': 'application/json' });                          // Response to be JSON format
     response.send(JSON.stringify({
-      serverMessage: 'Validation checks failed!',
+      serverMessage: 'Validation failed!',
       err: true,
       newUserDetails: verifiedUserDetailsObject.newUserDetails
     }));

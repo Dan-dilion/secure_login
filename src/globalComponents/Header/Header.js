@@ -5,13 +5,19 @@ import {
   Typography,
   Toolbar,
   Tabs,
-  Tab
+  Tab,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem
 } from '@material-ui/core';
 import {
   Info as InfoIcon,
   Lock as LockIcon,
   LockOpen as LockOpenIcon,
-  Home as HomeIcon
+  Home as HomeIcon,
+  AccountCircle as UserIcon,
+  BlurCircular as UserDissabledIcon
 } from '@material-ui/icons';
 
 import HeaderLogic from './HeaderLogic.js';
@@ -20,9 +26,13 @@ const Header = (props) => {
   // De-structure logic
   const {
     classes,
+    anchorEl,
+    setAnchorEl,
     handleChange,
     verifiedLogin,
-    headerSelection
+    headerSelection,
+    userMenuOptions,
+    handleUserMenuSelect
   } = HeaderLogic(props);
 
   return (
@@ -50,6 +60,34 @@ const Header = (props) => {
               <Tab className={classes.tab} icon={(verifiedLogin ? <LockOpenIcon /> : <LockIcon />)} onClick={() => handleChange('Private')} label='Private' wrapped />
             </Tabs>
           </div>
+
+          <Container className={classes.buttonContainer} maxWidth={false}>
+            <Button className={classes.loginButton} variant="outlined" color="secondary">Login</Button>
+            <Button className={classes.signupButton} variant="contained" color="secondary" disableElevation={true}>Sign-Up</Button>
+          </Container>
+
+          <IconButton
+            className={classes.iconButton}
+            aria-label="more"
+            aria-controls="user-menu"
+            aria-haspopup="true"
+            onClick={ event => setAnchorEl(event.currentTarget) }
+          ><UserIcon className={classes.userIcon} /></IconButton>
+        <Menu
+          id="user-menu"
+          className={classes.userMenu}
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={() => setAnchorEl(null)}
+          PaperProps={{ className: classes.menuItems }}
+        >
+        {userMenuOptions.map(option => (
+          <MenuItem key={option} selected={option === 'logOut'} onClick={() => handleUserMenuSelect(option)}>
+            {option}
+          </MenuItem>
+        ))}
+      </Menu>
 
         </Toolbar>
       </AppBar>

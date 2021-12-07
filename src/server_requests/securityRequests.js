@@ -1,12 +1,12 @@
 // Request Log In
-export const requestLogin = (userName, password, callBack) => {
-  fetch('http://localhost:8080/api/login', {
+export const requestLogin = (emailAddress, password, callBack) => {
+  fetch('http://localhost:8987/secure_login/api/login', {
     method: 'POST',
     headers: {
       Accept: 'application/json',                             // Allow JSON responses
       'Content-Type': 'application/json'                        // Incoming data type to be JSON
     },
-    body: JSON.stringify({ userName: userName, password: password })  // Make sure the body params are a JSON object!
+    body: JSON.stringify({ emailAddress: emailAddress, password: password })  // Make sure the body params are a JSON object!
   })
     .then(response => response.json())
     .then(results => {
@@ -24,7 +24,7 @@ export const verifyUser = (token, callBack) => {
   console.log('SecurityRequests.js - verifying User...');
 
   if (token) {
-    fetch('http://localhost:8080/api/verify_user', {
+    fetch('http://localhost:8987/secure_login/api/verify_user', {
       method: 'POST',
       headers: {
         Accept: 'application/json',                             // Allow JSON responses
@@ -48,7 +48,7 @@ export const verifyUser = (token, callBack) => {
 
 // Register New User
 export const registerUser = userDetails => {
-  return fetch('http://localhost:8080/api/register_new_user/', {
+  return fetch('http://localhost:8987/secure_login/api/register_new_user/', {
     method: 'post',
     headers: {
       Accept: 'application/json',                               // Allow JSON responses
