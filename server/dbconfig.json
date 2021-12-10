@@ -1,0 +1,7 @@
+{
+  "host": "localhost",
+  "user": "testing",
+  "password": "testing",
+  "database": "node_login",
+  "prefix": ""
+}

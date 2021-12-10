@@ -1,4 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { useSnackbar } from 'notistack';
+import { Slide } from '@material-ui/core';
 
 import useStyles from './BodyStyle.js';
 import { setVerifiedToken } from '../Login/loginSlice.js';
@@ -8,13 +10,32 @@ const BodyLogic = ({ query }) => {
   const classes = useStyles();
   const loggedIn = useSelector(state => state.login.loggedIn);
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   const pressMeCallBack = results => {
-    results.verified
-      ? results.error
-        ? dispatch(setSqlResults([{ Error: results.message }]))
-        : dispatch(setSqlResults(results.results))
-      : dispatch(setVerifiedToken(results.verified));
+    if (results.verified) {
+      if (results.error) {
+        dispatch(setSqlResults([{ Error: results.message }]));
+        enqueueSnackbar(results.message, {
+          variant: 'error',
+          anchorOrigin: {
+            vertical: 'bottom',
+            horizontal: 'center'
+          },
+          TransitionComponent: Slide
+        });
+      } else dispatch(setSqlResults(results.results));
+    } else {
+      dispatch(setVerifiedToken(results.verified));
+      enqueueSnackbar(results.message, {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'center'
+        },
+        TransitionComponent: Slide
+      });
+    }
   };
 
   return {

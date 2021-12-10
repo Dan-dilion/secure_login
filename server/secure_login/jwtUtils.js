@@ -19,7 +19,7 @@ const verifyLogin = (req, res, next) => {
   } catch (err) {
     return res.status(401).send({
       verified: false,
-      msg: 'Your session is not valid!'
+      message: 'Your session is not valid!'
     });
   }
 };

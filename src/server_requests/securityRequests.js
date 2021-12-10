@@ -1,5 +1,6 @@
 import { setLogout } from '../pages/Login/loginSlice.js';
 import store from '../reducers/';
+
 // Request Log In
 export const requestLogin = (emailAddress, password, callBack) => {
   fetch('http://localhost:8987/secure_login/api/login', {
@@ -12,18 +13,39 @@ export const requestLogin = (emailAddress, password, callBack) => {
   })
     .then(response => response.json())
     .then(results => {
-      // console.log("requestLogin - ", results.msg);
+      // console.log("requestLogin - ", results.message);
       localStorage.setItem('ACCESS_TOKEN', JSON.stringify(results));      // Store Token to keep login status
       callBack(results);
     })
     .catch(response => { console.log('Fetch Error: ', response); });
 };
 
-// Request Sign Out
+
+// Sign User Out
 export const signOut = () => {
   localStorage.removeItem('ACCESS_TOKEN');
   store.dispatch(setLogout());
 };
+
+
+// Delete User From Database
+export const deleteUser = (token, userId) => {
+  const response = fetch('http://localhost:8987/secure_login/api/delete_user/', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',                             // Allow JSON responses
+      'Content-Type': 'application/json',                     // Incoming data type to be JSON
+      Authorization: 'Bearer ' + token
+    },
+    body: JSON.stringify({ userId: userId })
+  })
+    .then(response => response.json())
+    .catch(response => { console.log('Fetch Error: ', response); });
+
+  signOut();
+  return response;
+};
+
 
 // Verify User
 export const verifyUser = (token, callBack) => {

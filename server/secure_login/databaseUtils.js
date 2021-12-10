@@ -3,6 +3,13 @@ const bcrypt = require('bcryptjs');
 
 const db = require('./config/dbConfig.js');
 
+const prefix = db.customOptions.prefix;
+const database = db.config.database;
+
+
+console.log('Database: ', database);
+console.log('prefix: ', prefix);
+
 /**
  * Check Password Strength
  */
@@ -295,7 +302,7 @@ const validateUserDetails = async userDetails => {
  */
 
 const checkLoginDetails = async (emailAddress, password) => {
-  const statement = 'SELECT * FROM node_login.users WHERE email = ?;';
+  const statement = `SELECT * FROM ${database}.${prefix}users WHERE email = ?;`;
 
   const queryDatabase = query => new Promise((resolve, reject) => {
     db.query(query, [emailAddress], (err, result, fields) => {
@@ -320,7 +327,7 @@ const checkLoginDetails = async (emailAddress, password) => {
  */
 
 const setLastLoggedInTime = id => {
-  db.query(`UPDATE users SET datelastlogin = now() WHERE id = '${id}'`);
+  db.query(`UPDATE ${database}.${prefix}users SET datelastlogin = now() WHERE id = '${id}'`);
 };
 
 
@@ -331,7 +338,7 @@ const setLastLoggedInTime = id => {
  */
 
 const checkEmailExists = email => {
-  const checkEmailQuery = 'SELECT * FROM node_login.users WHERE email = ?';
+  const checkEmailQuery = `SELECT * FROM ${database}.${prefix}users WHERE email = ?`;
 
   const queryDatabase = query => new Promise((resolve, reject) => {
     db.query(query, [email], (err, result, fields) => {
@@ -349,18 +356,41 @@ const checkEmailExists = email => {
 };
 
 /******************************************************************************/
+/**
+ * Delete User From Database
+ */
+
+const deleteUser = (userId) => {
+  const statement = `DELETE FROM ${database}.${prefix}users WHERE id = ?;`;
+
+  const queryDatabase = query => new Promise((resolve, reject) => {
+    db.query(query, [userId], (err, result, fields) => {
+      err
+        ? reject(new Error(`DB query failed - ${err.code}: ${err.sqlMessage}`))
+        : result.affectedRows < 1
+          ? reject(new Error('DB Error - No affected rows!'))
+          : resolve(result);
+    });
+  });
+
+  return queryDatabase(statement)
+    .then(result => ({ verified: true, error: false, message: `${result.affectedRows} users deleted from database`, results: result }))
+    .catch(error => ({ verified: true, error: true, message: error.toString() }));
+};
+
+/******************************************************************************/
 
 /**
  * Get User Details
  */
 
 const getUserDetails = () => {
-  const statement = 'SELECT id, username, password, email FROM node_login.users';
+  const statement = `SELECT id, username, password, email FROM ${database}.${prefix}users`;
 
   const queryDatabase = query => new Promise((resolve, reject) => {
     db.query(query, (err, result, fields) => {
       err
-        ? reject(new Error('DB query failed: ' + err.code + ': ' + err.sqlMessage))
+        ? reject(new Error('DB query failed - ' + err.code + ': ' + err.sqlMessage))
         : resolve(result);
     });
   });
@@ -377,7 +407,7 @@ const getUserDetails = () => {
 
 const addNewUser = (details) => {
   console.log('Hashed Password: ', details.password1.hash);
-  const statement = 'INSERT INTO node_login.users(username, email, password, phone, address, dob, gender) VALUES (?, ?, ?, ?, ?, ?, ?);';
+  const statement = `INSERT INTO ${database}.${prefix}users(username, email, password, phone, address, dob, gender) VALUES (?, ?, ?, ?, ?, ?, ?);`;
   const queryDatabase = query => new Promise((resolve, reject) => {
     db.query(query, [
       details.username.value,
@@ -407,6 +437,7 @@ module.exports = {
   checkLoginDetails,
   setLastLoggedInTime,
   checkEmailExists,
+  deleteUser,
   getUserDetails,
   addNewUser
 };

@@ -42,7 +42,7 @@ const LoginLogic = () => {
   const loginAction = (results) => {
     if (results.verified) {
       dispatch(setLoggedIn(results));
-      enqueueSnackbar('loginAction Success: ' + results.msg, {
+      enqueueSnackbar('loginAction Success: ' + results.message, {
         variant: 'success',
         anchorOrigin: {
           vertical: 'bottom',
@@ -53,7 +53,7 @@ const LoginLogic = () => {
       dispatch(setLoginModalVisible(false));
       navigate(state.path || '/Body');
     } else {
-      enqueueSnackbar(results.msg, {
+      enqueueSnackbar(results.message, {
         variant: 'error',
         anchorOrigin: {
           vertical: 'bottom',

@@ -132,3 +132,16 @@ router.post('/register_new_user/', async (request, response, next) => {
   }
 
 });
+
+
+/******************************************************************************/
+/**
+ * Delete User From Database
+ */
+
+router.post('/delete_user/', jwtUtils.verifyLogin, (request, response, next) => {
+  databaseUtils.deleteUser(request.body.userId).then(result => {
+    response.set({ 'Content-Type': 'application/json' });
+    response.send(JSON.stringify(result));
+  });
+});
