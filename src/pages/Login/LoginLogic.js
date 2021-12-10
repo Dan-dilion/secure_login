@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { Slide } from '@material-ui/core';
 
-import { setLoginModalVisible, setLoginOrRegister } from '../../App/AppSlice.js';
+import { setLoginModalVisible } from '../../App/AppSlice.js';
 import { setLoggedIn, setLoginForm } from './loginSlice.js';
 import { requestLogin } from '../../server_requests/securityRequests.js';
 
@@ -45,18 +45,18 @@ const LoginLogic = () => {
       enqueueSnackbar('loginAction Success: ' + results.msg, {
         variant: 'success',
         anchorOrigin: {
-          vertical: 'top',
+          vertical: 'bottom',
           horizontal: 'center'
         },
         TransitionComponent: Slide
       });
-      dispatch(setLoginModalVisible({ visible: false, returnPath: state.path }));
+      dispatch(setLoginModalVisible(false));
       navigate(state.path || '/Body');
     } else {
       enqueueSnackbar(results.msg, {
         variant: 'error',
         anchorOrigin: {
-          vertical: 'top',
+          vertical: 'bottom',
           horizontal: 'center'
         },
         TransitionComponent: Slide
@@ -65,15 +65,13 @@ const LoginLogic = () => {
   };
 
   const handleSubmit = (event) => {
-    requestLogin(values.emailAddress, values.password, loginAction);
     event.preventDefault();
+    requestLogin(values.emailAddress, values.password, loginAction);
   };
 
 
   return {
     classes,
-    setLoginOrRegister,
-    dispatch,
     values,
     showPassword,
     handleChange,

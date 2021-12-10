@@ -7,13 +7,14 @@ const LoginPrompt = (props) => {
   // De-construct logic
   const {
     classes,
-    state,
     dispatch,
-    setLoginModalVisible
+    setLoginModalVisible,
+    setLoginOrRegister
   } = LoginPromptLogic(props);
 
   useEffect(() => {
-    dispatch(setLoginModalVisible({ visible: true, returnPath: state.path }));
+    dispatch(setLoginOrRegister('login'));
+    dispatch(setLoginModalVisible(true));
   }, []);
 
   return (
@@ -22,7 +23,15 @@ const LoginPrompt = (props) => {
         <Typography variant="h5">
           Please log in to see the contents of this page
         </Typography>
-        <Button className={classes.loginButton} variant="outlined" color="primary" onClick={() => dispatch(setLoginModalVisible({ visible: true, returnPath: state.path }))}>
+        <Button
+          className={classes.loginButton}
+          variant="outlined"
+          color="primary"
+          onClick={() => {
+            dispatch(setLoginOrRegister('login'));
+            dispatch(setLoginModalVisible(true));
+          }}
+        >
           Login
         </Button>
       </Card>

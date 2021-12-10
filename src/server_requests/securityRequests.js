@@ -1,3 +1,5 @@
+import { setLogout } from '../pages/Login/loginSlice.js';
+import store from '../reducers/';
 // Request Log In
 export const requestLogin = (emailAddress, password, callBack) => {
   fetch('http://localhost:8987/secure_login/api/login', {
@@ -17,7 +19,11 @@ export const requestLogin = (emailAddress, password, callBack) => {
     .catch(response => { console.log('Fetch Error: ', response); });
 };
 
-
+// Request Sign Out
+export const signOut = () => {
+  localStorage.removeItem('ACCESS_TOKEN');
+  store.dispatch(setLogout());
+};
 
 // Verify User
 export const verifyUser = (token, callBack) => {

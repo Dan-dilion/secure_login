@@ -44,6 +44,11 @@ const useStyles = makeStyles(theme => ({
     color: 'white',
     fontSize: '1.5em'
   },
+  userIconDisabled: {
+    color: 'white',
+    opacity: 0.2,
+    fontSize: '1.5em'
+  },
   userMenu: {
     top: '100%'
   },

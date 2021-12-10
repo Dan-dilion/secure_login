@@ -16,16 +16,17 @@ import {
   Lock as LockIcon,
   LockOpen as LockOpenIcon,
   Home as HomeIcon,
-  AccountCircle as UserIcon,
-  BlurCircular as UserDissabledIcon
+  AccountCircle as UserIcon
 } from '@material-ui/icons';
 
+import { setLoginModalVisible, setLoginOrRegister } from '../../App/AppSlice.js';
 import HeaderLogic from './HeaderLogic.js';
 
 const Header = (props) => {
   // De-structure logic
   const {
     classes,
+    dispatch,
     anchorEl,
     setAnchorEl,
     handleChange,
@@ -55,15 +56,47 @@ const Header = (props) => {
               value={headerSelection}
               indicatorColor="secondary"
             >
-              <Tab className={classes.tab} icon={<HomeIcon />} onClick={() => handleChange('Home')} label='Home' wrapped />
-              <Tab className={classes.tab} icon={<InfoIcon />} onClick={() => handleChange('About')} label='About' wrapped />
-              <Tab className={classes.tab} icon={(verifiedLogin ? <LockOpenIcon /> : <LockIcon />)} onClick={() => handleChange('Private')} label='Private' wrapped />
+              <Tab
+                className={classes.tab}
+                icon={<HomeIcon />}
+                onClick={() => handleChange('Home')}
+                label='Home'
+                wrapped
+              />
+              <Tab
+                className={classes.tab}
+                icon={<InfoIcon />}
+                onClick={() => handleChange('About')}
+                label='About'
+                wrapped
+              />
+              <Tab
+                className={classes.tab}
+                icon={(verifiedLogin ? <LockOpenIcon /> : <LockIcon />)}
+                onClick={() => handleChange('Private')}
+                label='Private'
+                wrapped
+              />
             </Tabs>
           </div>
 
           <Container className={classes.buttonContainer} maxWidth={false}>
-            <Button className={classes.loginButton} variant="outlined" color="secondary">Login</Button>
-            <Button className={classes.signupButton} variant="contained" color="secondary" disableElevation={true}>Sign-Up</Button>
+            <Button
+              className={classes.loginButton}
+              onClick={() => {
+                dispatch(setLoginOrRegister('login'));
+                dispatch(setLoginModalVisible(true));
+              }}
+              variant="outlined" color="secondary">Login</Button>
+            <Button
+              className={classes.signupButton}
+              onClick={() => {
+                dispatch(setLoginOrRegister('register'));
+                dispatch(setLoginModalVisible(true));
+              }}
+              variant="contained"
+              color="secondary"
+              disableElevation={true}>Sign-Up</Button>
           </Container>
 
           <IconButton
@@ -71,8 +104,13 @@ const Header = (props) => {
             aria-label="more"
             aria-controls="user-menu"
             aria-haspopup="true"
+            disabled={!verifiedLogin}
             onClick={ event => setAnchorEl(event.currentTarget) }
-          ><UserIcon className={classes.userIcon} /></IconButton>
+          >{
+            verifiedLogin
+              ? <UserIcon className={classes.userIcon} />
+              : <UserIcon className={classes.userIconDisabled} />
+          }</IconButton>
         <Menu
           id="user-menu"
           className={classes.userMenu}
@@ -81,9 +119,22 @@ const Header = (props) => {
           open={Boolean(anchorEl)}
           onClose={() => setAnchorEl(null)}
           PaperProps={{ className: classes.menuItems }}
+          getContentAnchorEl={null}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center'
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center'
+          }}
         >
         {userMenuOptions.map(option => (
-          <MenuItem key={option} selected={option === 'logOut'} onClick={() => handleUserMenuSelect(option)}>
+          <MenuItem
+            key={option}
+            selected={option === 'logOut'}
+            onClick={() => handleUserMenuSelect(option)}
+          >
             {option}
           </MenuItem>
         ))}

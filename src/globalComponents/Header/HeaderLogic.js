@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { signOut } from '../../server_requests/securityRequests.js';
 import { setHeaderUnderline } from '../../App/AppSlice.js';
 import useStyles from './HeaderStyle.js';
 
@@ -14,13 +15,19 @@ const HeaderLogic = () => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const userMenuOptions = [
-    'Logout'
+    'Logout',
+    'Delete Account'
   ];
 
   const handleUserMenuSelect = (option) => {
     switch (option) {
       case 'Logout': {
         console.log('Logging out');
+        signOut();
+        break;
+      }
+      case 'Delete Account': {
+        console.log('Deleting account');
         break;
       }
       default: break;
@@ -39,6 +46,7 @@ const HeaderLogic = () => {
 
   return {
     classes,
+    dispatch,
     anchorEl,
     setAnchorEl,
     handleChange,

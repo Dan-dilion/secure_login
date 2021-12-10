@@ -2,6 +2,7 @@ import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
+    padding: '1.5rem'
   },
   inputBoxes: {
     // display: 'flex',
@@ -9,7 +10,7 @@ const useStyles = makeStyles(theme => ({
     // justifyContent: 'space-between'
   },
   heading: {
-    margin: '1.5rem 0'
+    // margin: '1.5rem 0'
   },
   emailAddressIcon: {
     color: 'black',

@@ -6,9 +6,9 @@ import { useSnackbar } from 'notistack';
 import owasp from 'owasp-password-strength-test';
 
 import { registerUser } from '../../server_requests/securityRequests.js';
-import { setLoginOrRegister } from '../../App/AppSlice.js';
 import { setLoginForm } from '../Login/loginSlice.js';
-import { setRegisterForm } from './registerSlice.js';
+import { setRegisterForm, resetRegisterForm } from './registerSlice.js';
+import { switchLoginOrRegister } from '../../utils/appUtils.js';
 import useStyles from './RegisterStyle.js';
 
 const RegisterLogic = ({ ...props }) => {
@@ -85,7 +85,7 @@ const RegisterLogic = ({ ...props }) => {
         enqueueSnackbar(response.serverMessage, {
           variant: 'error',
           anchorOrigin: {
-            vertical: 'top',
+            vertical: 'bottom',
             horizontal: 'center'
           },
           TransitionComponent: Slide
@@ -95,14 +95,14 @@ const RegisterLogic = ({ ...props }) => {
         enqueueSnackbar(response.serverMessage, {
           variant: 'success',
           anchorOrigin: {
-            vertical: 'top',
+            vertical: 'bottom',
             horizontal: 'center'
           },
           TransitionComponent: Slide
         });
-        setValues(response.newUserDetails);
+        dispatch(resetRegisterForm());
         dispatch(setLoginForm({ emailAddress: response.newUserDetails.email.value, password: '' }));
-        dispatch(setLoginOrRegister(true));
+        switchLoginOrRegister('login');
       }
     });
   };
@@ -114,10 +114,9 @@ const RegisterLogic = ({ ...props }) => {
   return {
     classes,
     theme,
-    dispatch,
-    setLoginOrRegister,
     values,
     setValues,
+    switchLoginOrRegister,
     showPasswords,
     handleClickShowPassword,
     onPasswordChange,

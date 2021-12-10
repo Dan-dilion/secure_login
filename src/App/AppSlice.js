@@ -5,7 +5,6 @@ const defaultState = {
   headerSelection: 0,
   loginModal: {
     visible: false,
-    returnPath: '/Home',
     loginOrRegister: true
   }
 };
@@ -29,12 +28,10 @@ const appSlice = createSlice({
       if (action.payload.delay) state.headerSelection = null;
 
       switch (action.payload.routeName) {
-        case 'home':
-        case 'Home':
-        case '': imposeDelay(() => { state.headerSelection = 0; }); break;
-        case 'about':
+        case '':
+        case 'Home': imposeDelay(() => { state.headerSelection = 0; }); break;
         case 'About': imposeDelay(() => { state.headerSelection = 1; }); break;
-        case 'private':
+        case 'LoginPrompt':
         case 'Private': imposeDelay(() => { state.headerSelection = 2; }); break;
         default: break;
       }
@@ -43,26 +40,21 @@ const appSlice = createSlice({
 
     setLoginModalVisible(state, action) {
       console.log('appReducer setLoginModalVisible here: ', action);
-      state.loginModal.visible = action.payload.visible;
-      state.loginModal.returnPath = action.payload.returnPath ? action.returnPath : '/Home';
+      state.loginModal.visible = action.payload;
     },
 
-
     setLoginOrRegister(state, action) {
-      console.log('appReducer setLoginOrRegister here: ', action);
-      let newState;
       switch (action.payload) {
         case true:
         case 'true':
         case 'Login':
-        case 'login': newState = true; break;
+        case 'login': state.loginModal.loginOrRegister = true; break;           // True == login
         case false:
         case 'false':
         case 'Register':
-        case 'register': newState = false; break;
-        default: newState = false;
+        case 'register': state.loginModal.loginOrRegister = false; break;       // False == register
+        default: break;
       }
-      state.loginModal.loginOrRegister = newState;  // True = login
     }
   }
 });

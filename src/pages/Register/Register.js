@@ -29,10 +29,9 @@ const Register = (props) => {
   const {
     classes,
     theme,
-    dispatch,
-    setLoginOrRegister,
     values,
     setValues,
+    switchLoginOrRegister,
     showPasswords,
     handleClickShowPassword,
     onPasswordChange,
@@ -49,7 +48,7 @@ const Register = (props) => {
         <Container className={classes.headingContainer}>
           <Typography className={classes.heading} variant="h3">Sign Up</Typography>
           <IconButton
-            onClick={ () => dispatch(setLoginOrRegister(true)) }
+            onClick={() => switchLoginOrRegister('login')}
           ><BackArrow className={classes.backIcon}/></IconButton>
         </Container>
 

@@ -26,8 +26,7 @@ const AppView = props => {
   const {
     classes,
     loginModal,
-    setLoginModalVisible,
-    setLoginOrRegister
+    setLoginModalVisible
   } = props;
 
   return (
@@ -41,8 +40,7 @@ const AppView = props => {
               className={classes.modal}
               open={loginModal.visible}
               onClose={ () => {
-                setLoginModalVisible({ visible: false, returnPath: loginModal.returnPath });
-                setTimeout(() => setLoginOrRegister(true), 1000);   // timeout is to allow transition to complete
+                setLoginModalVisible(false);
               }}
               closeAfterTransition
               BackdropComponent={ Backdrop }
@@ -102,7 +100,6 @@ AppView.propTypes = {
   classes: PropTypes.object,
   loginModal: PropTypes.object,
   setLoginModalVisible: PropTypes.func,
-  setLoginOrRegister: PropTypes.func,
   query: PropTypes.string
 };
 

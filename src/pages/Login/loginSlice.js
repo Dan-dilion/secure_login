@@ -36,6 +36,10 @@ const loginSlice = createSlice({
     },
     setLoggedInButWaitingToVerify(state, action) {
       state.loggedIn.loggedInButWaitingToVerify = action.payload;
+    },
+    setLogout(state, action) {
+      state.loggedIn = defaultState.loggedIn;
+      state.loginForm = defaultState.loginForm;
     }
   }
 });
@@ -44,7 +48,8 @@ export const {
   setLoginForm,
   setLoggedIn,
   setVerifiedToken,
-  setLoggedInButWaitingToVerify
+  setLoggedInButWaitingToVerify,
+  setLogout
 } = loginSlice.actions;
 
 export default loginSlice.reducer;

@@ -62,12 +62,16 @@ const registerSlice = createSlice({
   reducers: {
     setRegisterForm(state, action) {
       state.registerForm = action.payload;
+    },
+    resetRegisterForm(state, action) {
+      state.registerForm = defaultState.registerForm;
     }
   }
 });
 
 export const {
-  setRegisterForm
+  setRegisterForm,
+  resetRegisterForm
 } = registerSlice.actions;
 
 export default registerSlice.reducer;

@@ -41,7 +41,6 @@ class App extends React.Component {
         classes={this.props.classes}
         loginModal={this.props.loginModal}
         setLoginModalVisible={this.props.setLoginModalVisible}
-        setLoginOrRegister={this.props.setLoginOrRegister}
       />
     );
   }

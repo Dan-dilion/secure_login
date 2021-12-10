@@ -20,14 +20,13 @@ import {
 
 
 import LoginLogic from './LoginLogic.js';   // Page logic
+import { switchLoginOrRegister } from '../../utils/appUtils.js';
 
 const Login = props => {
 
   // Deconstruct page logic
   const {
     classes,
-    setLoginOrRegister,
-    dispatch,
     values,
     showPassword,
     handleChange,
@@ -105,16 +104,12 @@ const Login = props => {
 
                 <Typography className={classes.links} component={Link} to="/LoginPrompt">Forgot Password?</Typography>
                 </Container>
-                <Typography className={classes.links} onClick={() => dispatch(setLoginOrRegister(false))}>Sign up here</Typography>
+                <Typography className={classes.links} onClick={() => switchLoginOrRegister('register')}>Sign up here</Typography>
               </Container>
             </Paper>
           </form>
         </div>
 
-        <div className={classes.infoPanel}>
-          <Typography variant='h5'>User name: test</Typography>
-          <Typography variant='h5'>password: test</Typography>
-        </div>
       </Container>
     < />
   );
