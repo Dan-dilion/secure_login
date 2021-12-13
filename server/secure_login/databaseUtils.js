@@ -7,9 +7,6 @@ const prefix = db.customOptions.prefix;
 const database = db.config.database;
 
 
-console.log('Database: ', database);
-console.log('prefix: ', prefix);
-
 /**
  * Check Password Strength
  */
@@ -317,7 +314,8 @@ const checkLoginDetails = async (emailAddress, password) => {
         const verifyPasswordHashResults = await comparePasswordHash(password, result[0].password);
         return { ...verifyPasswordHashResults, result: result };
       } else return { success: false, message: 'Email or Password Incorrect!', result: [] };
-    });
+    })
+    .catch(error => ({ success: false, message: error.toString() }));
 };
 
 /******************************************************************************/
@@ -385,7 +383,7 @@ const deleteUser = (userId) => {
  */
 
 const getUserDetails = () => {
-  const statement = `SELECT id, username, password, email FROM ${database}.${prefix}users`;
+  const statement = `SELECT id, username, email, password, phone, address, dob, gender, datecreated, datelastlogin FROM ${database}.${prefix}users`;
 
   const queryDatabase = query => new Promise((resolve, reject) => {
     db.query(query, (err, result, fields) => {

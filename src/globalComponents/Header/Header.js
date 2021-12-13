@@ -87,6 +87,7 @@ const Header = (props) => {
                 dispatch(setLoginOrRegister('login'));
                 dispatch(setLoginModalVisible(true));
               }}
+              disabled={verifiedLogin}
               variant="outlined" color="secondary">Login</Button>
             <Button
               className={classes.signupButton}
@@ -94,6 +95,7 @@ const Header = (props) => {
                 dispatch(setLoginOrRegister('register'));
                 dispatch(setLoginModalVisible(true));
               }}
+              disabled={verifiedLogin}
               variant="contained"
               color="secondary"
               disableElevation={true}>Sign-Up</Button>

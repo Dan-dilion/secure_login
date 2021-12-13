@@ -138,7 +138,7 @@ const Register = (props) => {
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      tabindex="-1"
+                      tabIndex="-1"
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
                       onMouseDown={preventDefaultEvent}
@@ -185,7 +185,7 @@ const Register = (props) => {
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      tabindex="-1"
+                      tabIndex="-1"
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
                       onMouseDown={preventDefaultEvent}
@@ -281,7 +281,7 @@ const Register = (props) => {
               error={values.dob.error}
               helperText={values.dob.message}
               value={values.dob.value}
-              label="Date Of Birth (dd/mm/yyyy)"
+              label="Date Of Birth"
               onError={(error, date) => {
                 if (error !== values.dob.pickerErrorMessage) {
                   setValues({

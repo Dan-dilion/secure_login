@@ -29,7 +29,9 @@ const DynamicTable = (props) => {
             {
               headerItems.map((header, i) => (
                 <TableCell className={`${classes.headerCells} ${tableClasses[header] ? tableClasses[header] : ''}`} key={JSON.stringify(i + data.length)}>
-                  {header}
+                  <div className={classes.internalScrollBox}>
+                    {header}
+                  </div>
                 </TableCell>
               ))
             }
@@ -42,7 +44,9 @@ const DynamicTable = (props) => {
                 {
                   headerItems.map((header, j) => (
                     <TableCell className={`${classes.bodyCells} ${tableClasses[header] ? tableClasses[header] : ''}`} key={JSON.stringify(i) + JSON.stringify(j)}>
-                      {row[header]}
+                      <div className={classes.internalScrollBox}>
+                        {row[header]}
+                      </div>
                     </TableCell>
                   ))
                 }

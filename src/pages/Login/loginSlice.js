@@ -6,7 +6,7 @@ const defaultState = {
     password: ''
   },
   loggedIn: {
-    msg: '',
+    message: '',
     verified: false,
     loggedInButWaitingToVerify: false,
     jwt: '',

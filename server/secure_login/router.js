@@ -12,7 +12,7 @@ router.post('/verify_user/', jwtUtils.verifyLogin, (request, response, next) => 
     console.log('user verified: true');
     response.send({
       verified: true,
-      msg: 'Session Verification Successful',
+      message: 'Session Verification Successful',
       userName: request.userData.userName,
       userId: request.userData.userId
     });
@@ -20,7 +20,7 @@ router.post('/verify_user/', jwtUtils.verifyLogin, (request, response, next) => 
     console.log('user varified: false');
     response.status(401).send({
       verified: false,
-      msg: 'Session failed to verify! Token is invalid',
+      message: 'Session failed to verify! Token is invalid',
       userName: request.userData.userName,
       userId: request.userData.userId
     });
@@ -68,7 +68,7 @@ router.post('/login/', async (request, response, next) => {
 
     response.send(JSON.stringify({
       verified: true,
-      msg: verifiedObject.message,
+      message: verifiedObject.message,
       jwt: token,
       user: verifiedObject.result[0],
       loggedInButWaitingToVerify: true
@@ -78,8 +78,8 @@ router.post('/login/', async (request, response, next) => {
 
   const rejectLogin = verifiedObject => {
     response.status(401).send(JSON.stringify({
-      loginSuccess: false,
-      msg: 'Login unsuccessful: ' + verifiedObject.message
+      verified: false,
+      message: 'Login unsuccessful: ' + verifiedObject.message
     }));
     console.log('Login concluded negatively: ', verifiedObject.message);
   };

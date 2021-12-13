@@ -12,6 +12,7 @@ const useStyles = makeStyles(theme => ({
   },
   toolbarStyle: {
     display: 'flex',
+    flexWrap: 'wrap',
     justifyContent: 'space-between'
   },
   titleStyle: {
@@ -25,6 +26,8 @@ const useStyles = makeStyles(theme => ({
   },
   buttonContainer: {
     maxWidth: '16em',
+    display: 'flex',
+    flexWrap: 'nowrap',
     margin: 0,
     padding: 0
   },

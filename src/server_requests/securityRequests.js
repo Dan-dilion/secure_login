@@ -14,10 +14,11 @@ export const requestLogin = (emailAddress, password, callBack) => {
     .then(response => response.json())
     .then(results => {
       // console.log("requestLogin - ", results.message);
-      localStorage.setItem('ACCESS_TOKEN', JSON.stringify(results));      // Store Token to keep login status
+      if (results.verified) localStorage.setItem('ACCESS_TOKEN', JSON.stringify(results));      // Store Token to keep login status
       callBack(results);
     })
-    .catch(response => { console.log('Fetch Error: ', response); });
+    // .catch(response => { console.log('Fetch Error: ', response); });
+    .catch(response => callBack(response));
 };
 
 
@@ -40,7 +41,7 @@ export const deleteUser = (token, userId) => {
     body: JSON.stringify({ userId: userId })
   })
     .then(response => response.json())
-    .catch(response => { console.log('Fetch Error: ', response); });
+    .catch(response => { console.log('Delete User Fetch Error: ', response); });
 
   signOut();
   return response;

@@ -55,7 +55,7 @@ const HeaderLogic = () => {
                 });
             });
           // .catch(response => {
-          //   enqueueSnackbar(response.msg, {
+          //   enqueueSnackbar(response.message, {
           //     variant: 'error',
           //     anchorOrigin: {
           //       vertical: 'bottom',

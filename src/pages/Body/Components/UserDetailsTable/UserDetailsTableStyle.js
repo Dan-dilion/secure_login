@@ -1,50 +1,35 @@
 import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
-  TableContainer: {
-    margin: '0 auto'
-  },
   id: {
-    width: '5%',
-    marginLeft: '1%',
-    overflow: 'scroll',
-    scrollbarWidth: 'none',
-    '&::-webkit-scrollbar': { display: 'none' }
+    maxWidth: '2rem'
   },
   username: {
-    width: '15%',
-    marginLeft: '1em',
-    overflow: 'scroll',
-    scrollbarWidth: 'none',
-    '&::-webkit-scrollbar': { display: 'none' }
-  },
-  password: {
-    width: '20%',
-    marginLeft: '1em',
-    overflow: 'scroll',
-    scrollbarWidth: 'none',
-    '&::-webkit-scrollbar': { display: 'none' }
+    maxWidth: '5rem'
   },
   email: {
-    width: '60%',
-    marginLeft: '1em',
-    overflow: 'scroll',
-    scrollbarWidth: 'none',
-    '&::-webkit-scrollbar': { display: 'none' }
+    maxWidth: '4rem'
   },
-  cellContainer: {
-    id: {
-      width: '5em'
-    },
-    username: {
-      width: '15em'
-    },
-    password: {
-      width: '20em'
-    },
-    email: {
-      width: '60em'
-    }
+  password: {
+    maxWidth: '5rem'
+  },
+  phone: {
+    maxWidth: '4rem'
+  },
+  address: {
+    maxWidth: '5rem'
+  },
+  dob: {
+    maxWidth: '5rem'
+  },
+  gender: {
+    maxWidth: '5rem'
+  },
+  datecreated: {
+    maxWidth: '6rem'
+  },
+  datelastlogin: {
+    maxWidth: '6rem'
   }
 }));
 
