@@ -44,13 +44,13 @@ const RegisterLogic = ({ ...props }) => {
 
     const pwdStrengthMessage = (pwd) => {
       const testResults = owasp.test(pwd);
-      let messageObject = { message: 'Weak password Strength', messageColor: 'red' };
+      let messageObject = { error: true, message: 'Weak password Strength', messageColor: 'red' };
       if (pwd && testResults.requiredTestErrors.length === 0) {
         if (testResults.optionalTestsPassed >= 3) {
-          messageObject = { message: 'Moderate password strength', messageColor: 'yellow' };
+          messageObject = { error: false, message: 'Moderate password strength', messageColor: 'yellow' };
         }
         if (testResults.strong) {
-          messageObject = { message: 'Strong password', messageColor: '#089c00' };
+          messageObject = { error: false, message: 'Strong password', messageColor: 'green' };
         }
       }
       return messageObject;
@@ -61,7 +61,7 @@ const RegisterLogic = ({ ...props }) => {
       password1: {
         ...values.password1,
         value: value,
-        error: value.length > 0,
+        error: value.length > 0 && pwdStrengthMessage(value).error,
         message: pwdStrengthMessage(value).message,
         messageColor: pwdStrengthMessage(value).messageColor
       }
