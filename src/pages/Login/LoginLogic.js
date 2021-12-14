@@ -42,6 +42,7 @@ const LoginLogic = () => {
   const loginAction = (results) => {
     if (results.verified) {
       dispatch(setLoggedIn(results));
+      dispatch(setLoginForm({ emailAddress: '', password: '' }));
       enqueueSnackbar('loginAction Success: ' + results.message, {
         variant: 'success',
         anchorOrigin: {

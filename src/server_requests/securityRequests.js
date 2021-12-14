@@ -6,10 +6,10 @@ export const requestLogin = (emailAddress, password, callBack) => {
   fetch('http://localhost:8987/secure_login/api/login', {
     method: 'POST',
     headers: {
-      Accept: 'application/json',                             // Allow JSON responses
-      'Content-Type': 'application/json'                        // Incoming data type to be JSON
-    },
-    body: JSON.stringify({ emailAddress: emailAddress, password: password })  // Make sure the body params are a JSON object!
+      Accept: 'application/json',                                               // Allow JSON responses
+      'Content-Type': 'application/json',                                       // Incoming data type to be JSON
+      Authorization: `Basic ${btoa(`${emailAddress}:${password}`)}`
+    }
   })
     .then(response => response.json())
     .then(results => {

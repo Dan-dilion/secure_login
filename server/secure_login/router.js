@@ -1,8 +1,9 @@
 const express = require('express');
-const router = express.Router();
 
 const jwtUtils = require('./jwtUtils.js');
 const databaseUtils = require('./databaseUtils.js');
+
+const router = express.Router();
 
 /**
  *  Verify User
@@ -61,6 +62,17 @@ router.post('/check_email/', (request, response, next) => {
  *  Login
  */
 router.post('/login/', async (request, response, next) => {
+
+  // split at zero length characters preceeding ':'
+  const authHeaderArray = atob(request.headers.authorization.split(' ')[1]).split(/(?<=:)/);
+  // remove remaining ':' from emailAddress
+  const emailAddress = authHeaderArray[0].split(':')[0];
+  let password = authHeaderArray[1];
+  // To join remaining ':' to password from authHeaderArray if any
+  authHeaderArray.forEach((item, i) => {
+    if (i >= 2) password += item;
+  });
+
   const resolveLogin = verifiedObject => {
     const token = jwtUtils.generateNewToken(verifiedObject.result[0].username, verifiedObject.result[0].id);
 
@@ -84,7 +96,7 @@ router.post('/login/', async (request, response, next) => {
     console.log('Login concluded negatively: ', verifiedObject.message);
   };
 
-  await databaseUtils.checkLoginDetails(request.body.emailAddress, request.body.password)
+  await databaseUtils.checkLoginDetails(emailAddress, password)
     .then(verifiedObject => {
       verifiedObject.success ? resolveLogin(verifiedObject) : rejectLogin(verifiedObject);
     });
