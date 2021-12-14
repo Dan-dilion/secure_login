@@ -102,7 +102,6 @@ router.post('/login/', async (request, response, next) => {
     });
 });
 
-module.exports = router;
 
 /******************************************************************************/
 
@@ -121,7 +120,7 @@ router.post('/register_new_user/', async (request, response, next) => {
         if (outcome.err) {
           response.set({ 'Content-Type': 'application/json' });                          // Response to be JSON format
           response.send(JSON.stringify({
-            serverMessage: `Validation passed, ${outcome.message}`,
+            serverMessage: `Form validation passed, ${outcome.message}`,
             err: true,
             newUserDetails: verifiedUserDetailsObject.newUserDetails
           }));
@@ -137,7 +136,7 @@ router.post('/register_new_user/', async (request, response, next) => {
   } else {
     response.set({ 'Content-Type': 'application/json' });                          // Response to be JSON format
     response.send(JSON.stringify({
-      serverMessage: 'Validation failed!',
+      serverMessage: 'Form validation failed!',
       err: true,
       newUserDetails: verifiedUserDetailsObject.newUserDetails
     }));
@@ -157,3 +156,7 @@ router.post('/delete_user/', jwtUtils.verifyLogin, (request, response, next) => 
     response.send(JSON.stringify(result));
   });
 });
+
+/******************************************************************************/
+
+module.exports = router;
