@@ -1,9 +1,11 @@
 import { setLogout } from '../pages/Login/loginSlice.js';
 import store from '../reducers/';
 
+const port = 8986;
+
 // Request Log In
 export const requestLogin = (emailAddress, password, callBack) => {
-  fetch('http://localhost:8987/secure_login/api/login', {
+  fetch(`http://localhost:${port}/secure_login/api/login`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',                                               // Allow JSON responses
@@ -31,7 +33,7 @@ export const signOut = () => {
 
 // Delete User From Database
 export const deleteUser = (token, userId) => {
-  const response = fetch('http://localhost:8987/secure_login/api/delete_user/', {
+  const response = fetch(`http://localhost:${port}/secure_login/api/delete_user/`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',                             // Allow JSON responses
@@ -53,7 +55,7 @@ export const verifyUser = (token, callBack) => {
   console.log('SecurityRequests.js - verifying User...');
 
   if (token) {
-    fetch('http://localhost:8987/secure_login/api/verify_user', {
+    fetch(`http://localhost:${port}/secure_login/api/verify_user`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',                             // Allow JSON responses
@@ -77,7 +79,7 @@ export const verifyUser = (token, callBack) => {
 
 // Register New User
 export const registerUser = userDetails => {
-  return fetch('http://localhost:8987/secure_login/api/register_new_user/', {
+  return fetch(`http://localhost:${port}/secure_login/api/register_new_user/`, {
     method: 'post',
     headers: {
       Accept: 'application/json',                               // Allow JSON responses

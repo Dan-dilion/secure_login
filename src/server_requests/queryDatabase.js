@@ -1,5 +1,7 @@
+const port = 8986;
+
 export const getUserDetails = (token) => {
-  return fetch('http://localhost:8987/secure_login/api/get_user_details/', {
+  return fetch(`http://localhost:${port}/secure_login/api/get_user_details/`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',                             // Allow JSON responses
@@ -15,7 +17,7 @@ export const getUserDetails = (token) => {
 
 
 export const checkEmail = email => {
-  return fetch('http://localhost:8987/secure_login/api/check_email/', {
+  return fetch(`http://localhost:${port}/secure_login/api/check_email/`, {
     method: 'post',
     headers: {
       Accept: 'application/json',                               // Allow JSON responses

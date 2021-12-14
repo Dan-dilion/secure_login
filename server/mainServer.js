@@ -3,6 +3,8 @@ const router = require('./secure_login/router.js');
 const express = require('express');
 const app = express();
 
+const config = require('./server_config.json');
+
 // express.json() is middleware to allow json payloads see https://flaviocopes.com/express-post-query-variables/
 // The cors middleware package takes care of headers now
 // app.use(express.json(), (request, response, next) => {
@@ -14,4 +16,4 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use('/secure_login/api', router);
-app.listen(8987);
+app.listen(config.port);
