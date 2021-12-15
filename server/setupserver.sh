@@ -120,8 +120,23 @@ EOF
     fi
   fi
   echo
+  echo "Would you like to download and install server dependancies now?"
+  echo "(alternatively you can run 'npm install' from the /server/ folder)"
+  read answer
+  if [ $answer == 'y' ]
+  then
+    npm i
+  fi
+  echo
   echo "All done!"
   echo
-
+  echo "would you like to run the server now?"
+  echo "(alternatively you can run 'node mainServer.js' from the /server/ folder)"
+  read answer
+  if [ $answer == 'y' ]
+  then
+    node ./mainServer.js
+  fi
+  echo
   exit 0
 fi
