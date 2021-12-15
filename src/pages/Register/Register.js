@@ -152,7 +152,7 @@ const Register = (props) => {
               <FormHelperText
                 className={classes.helperMessage}
                 style={{
-                  opacity: values.password1.value.length > 0 ? 1 : 0,
+                  opacity: values.password1.value.length > 0 || values.password1.error ? 1 : 0,
                   color: values.password1.messageColor === 'red'
                     ? theme.palette.error.main
                     : values.password1.messageColor === 'yellow'

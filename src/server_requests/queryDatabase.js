@@ -1,7 +1,8 @@
 const port = 8986;
+const apiUrl = `${window.location.protocol}//${window.location.hostname}:${port}`;
 
 export const getUserDetails = (token) => {
-  return fetch(`http://localhost:${port}/secure_login/api/get_user_details/`, {
+  return fetch(apiUrl + '/api/get_user_details/', {
     method: 'POST',
     headers: {
       Accept: 'application/json',                             // Allow JSON responses
@@ -17,7 +18,7 @@ export const getUserDetails = (token) => {
 
 
 export const checkEmail = email => {
-  return fetch(`http://localhost:${port}/secure_login/api/check_email/`, {
+  return fetch(apiUrl + '/api/check_email/', {
     method: 'post',
     headers: {
       Accept: 'application/json',                               // Allow JSON responses

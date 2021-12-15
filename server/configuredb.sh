@@ -54,7 +54,7 @@ echo "Please enter the user name for your MySql server: "
   \"password\": \"$password\",
   \"database\": \"$database\",
   \"prefix\": \"$prefix\"
-}" > ./dbconfig.JSON
+}" > ./dbconfig.json
 
   echo "dbconfig.json successfully created."
   echo
@@ -92,7 +92,7 @@ dob date DEFAULT NULL,
 gender varchar(20) DEFAULT NULL,
 PRIMARY KEY (id),
 UNIQUE KEY id_UNIQUE (id) )
-ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;"
+ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8_general_ci;"
 
     mysql -u$user -D $database -p$password <<EOF
 
@@ -108,7 +108,7 @@ dob date DEFAULT NULL,
 gender varchar(20) DEFAULT NULL,
 PRIMARY KEY (id),
 UNIQUE KEY id_UNIQUE (id) )
-ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 EOF
 

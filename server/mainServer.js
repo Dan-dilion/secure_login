@@ -15,5 +15,5 @@ const config = require('./server_config.json');
 
 app.use(express.json());
 app.use(cors());
-app.use('/secure_login/api', router);
+app.use('/api', router);
 app.listen(config.port);
