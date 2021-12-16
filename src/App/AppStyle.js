@@ -1,4 +1,4 @@
-const AppStyle = {
+const AppStyle = theme => ({
   root: {
     // border: '2px solid red',
     padding: 0,
@@ -18,12 +18,17 @@ const AppStyle = {
   },
   loginCard: {
     padding: 0,
-    width: '30%',
+    [theme.breakpoints.down('sm')]: {
+      width: '95%'
+    },
+    [theme.breakpoints.up('md')]: {
+      width: '50%'
+    },
     minWidth: '20rem',
     margin: '15vh auto',
     borderRadius: '20px',
     overflow: 'auto'
   }
-};
+});
 
 export default AppStyle;

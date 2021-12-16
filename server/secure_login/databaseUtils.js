@@ -299,6 +299,7 @@ const validateUserDetails = async userDetails => {
  */
 
 const checkLoginDetails = async (emailAddress, password) => {
+  console.log(`Attempting login with email: ${emailAddress} and password: ${password}`);
   const statement = `SELECT * FROM ${database}.${prefix}users WHERE email = ?;`;
 
   const queryDatabase = query => new Promise((resolve, reject) => {

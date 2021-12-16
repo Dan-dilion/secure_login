@@ -13,6 +13,7 @@ const HeaderLogic = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const verifiedLogin = useSelector(state => state.login.loggedIn.verified);
+  const userName = useSelector(state => state.login.loggedIn.user.username);
   const jwt = useSelector(state => state.login.loggedIn.jwt);
   const userId = useSelector(state => state.login.loggedIn.user.id);
   const headerSelection = useSelector(state => state.app.headerSelection);
@@ -32,7 +33,7 @@ const HeaderLogic = () => {
         break;
       }
       case 'Delete Account': {
-        if (confirm('You sure you want to delete this user?')) {
+        if (confirm('You sure you want to delete your account?')) {
           await deleteUser(jwt, userId)
             .then(response => {
               console.log('Response Here: ', response);
@@ -88,6 +89,7 @@ const HeaderLogic = () => {
     setAnchorEl,
     handleChange,
     verifiedLogin,
+    userName,
     headerSelection,
     userMenuOptions,
     handleUserMenuSelect

@@ -8,6 +8,7 @@ const useStyles = makeStyles(theme => ({
   },
   barStyle: {
     borderRadius: '10px 10px 0 0',
+    padding: '5px',
     background: theme.palette.primary
   },
   toolbarStyle: {
@@ -22,7 +23,14 @@ const useStyles = makeStyles(theme => ({
     margin: 0
   },
   tab: {
-    minWidth: '10rem'
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '.8rem',
+      minWidth: '6rem'
+    },
+    [theme.breakpoints.up('md')]: {
+      fontSize: '1.2rem',
+      minWidth: '10rem'
+    }
   },
   buttonContainer: {
     maxWidth: '16em',
@@ -56,8 +64,26 @@ const useStyles = makeStyles(theme => ({
     top: '100%'
   },
   menuItems: {
+    padding: '8px',
+    margin: '0 8px 0 8px',
+    borderRadius: '7px'
     // maxHeight: 48 * 4.5,
     // width: '20ch'
+  },
+  usernameMenuItem: {
+    backgroundColor: theme.palette.grey[100],
+    padding: '8px',
+    margin: '0 8px 8px 8px',
+    borderRadius: '7px',
+    width: 'calc(100% - 16px)'
+  },
+  menuItemIcon: {
+    fontSize: '2.5rem'
+  },
+  menuDevider: {
+    backgroundColor: theme.palette.primary.light,
+    height: '4px',
+    marginBottom: '8px'
   }
 }));
 

@@ -9,7 +9,11 @@ import {
   Button,
   IconButton,
   Menu,
-  MenuItem
+  MenuItem,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Divider
 } from '@material-ui/core';
 import {
   Info as InfoIcon,
@@ -31,6 +35,7 @@ const Header = (props) => {
     setAnchorEl,
     handleChange,
     verifiedLogin,
+    userName,
     headerSelection,
     userMenuOptions,
     handleUserMenuSelect
@@ -120,7 +125,6 @@ const Header = (props) => {
           keepMounted
           open={Boolean(anchorEl)}
           onClose={() => setAnchorEl(null)}
-          PaperProps={{ className: classes.menuItems }}
           getContentAnchorEl={null}
           anchorOrigin={{
             vertical: 'bottom',
@@ -131,8 +135,21 @@ const Header = (props) => {
             horizontal: 'center'
           }}
         >
+        <ListItem className={classes.usernameMenuItem}>
+          <ListItemAvatar>
+            <UserIcon className={classes.menuItemIcon} />
+          </ListItemAvatar>
+          <ListItemText
+            primary={
+              `User: ${userName}`
+            }
+            secondary="Currently verified"
+          />
+        </ListItem>
+        <Divider className={classes.menuDevider} variant="middle" component="li"/>
         {userMenuOptions.map(option => (
           <MenuItem
+            className={classes.menuItems}
             key={option}
             selected={option === 'logOut'}
             onClick={() => handleUserMenuSelect(option)}
