@@ -10,7 +10,7 @@ const connection = mysql.createConnection({
 
 connection.connect(err => {
   if (err) throw err;
-  console.log('Connected to DB: node_login');
+  console.log(`Connected to database: ${dbconfig.database} as ${dbconfig.user}`);
 });
 
 connection.customOptions = { prefix: dbconfig.prefix };

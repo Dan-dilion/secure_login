@@ -17,3 +17,5 @@ app.use(express.json());
 app.use(cors());
 app.use('/api', router);
 app.listen(config.port);
+
+console.log(`Node server listening on port ${config.port}`);

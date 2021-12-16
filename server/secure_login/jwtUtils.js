@@ -1,14 +1,11 @@
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('./config/jwtConfig.js');
 
-console.log('JWT Config: ', jwtConfig);
-
 /**
  * Verify Logged In User
  */
 const verifyLogin = (req, res, next) => {
   try {
-    console.log('MiddleWare - headers', req.headers);
     const token = req.headers.authorization.split(' ')[1];
     const decoded = jwt.verify(
       token,

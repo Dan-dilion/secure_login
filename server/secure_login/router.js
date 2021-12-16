@@ -14,7 +14,6 @@ const atob = (base64) => {
  */
 router.post('/verify_user/', jwtUtils.verifyLogin, (request, response, next) => {
   if (request.userData) {
-    console.log('user verified: true');
     response.send({
       verified: true,
       message: 'Session Verification Successful',
@@ -22,7 +21,6 @@ router.post('/verify_user/', jwtUtils.verifyLogin, (request, response, next) => 
       userId: request.userData.userId
     });
   } else {
-    console.log('user varified: false');
     response.status(401).send({
       verified: false,
       message: 'Session failed to verify! Token is invalid',
@@ -89,7 +87,6 @@ router.post('/login/', async (request, response, next) => {
       user: verifiedObject.result[0],
       loggedInButWaitingToVerify: true
     }));
-    console.log('Login concluded positively: ', verifiedObject.message);
   };
 
   const rejectLogin = verifiedObject => {
@@ -97,7 +94,6 @@ router.post('/login/', async (request, response, next) => {
       verified: false,
       message: 'Login unsuccessful: ' + verifiedObject.message
     }));
-    console.log('Login concluded negatively: ', verifiedObject.message);
   };
 
   await databaseUtils.checkLoginDetails(emailAddress, password)
@@ -116,7 +112,6 @@ router.post('/login/', async (request, response, next) => {
 router.post('/register_new_user/', async (request, response, next) => {
 
   const verifiedUserDetailsObject = await databaseUtils.validateUserDetails(request.body.userDetails);
-  console.log('Usere Details Here: ', verifiedUserDetailsObject);
   if (verifiedUserDetailsObject.okayToSubmit) {
     verifiedUserDetailsObject.newUserDetails.password1.hash = await databaseUtils.hashPassword(verifiedUserDetailsObject.newUserDetails.password1.value);
     databaseUtils.addNewUser(verifiedUserDetailsObject.newUserDetails)

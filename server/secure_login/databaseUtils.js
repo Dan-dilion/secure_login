@@ -404,7 +404,6 @@ const getUserDetails = () => {
  */
 
 const addNewUser = (details) => {
-  console.log('Hashed Password: ', details.password1.hash);
   const statement = `INSERT INTO ${database}.${prefix}users(username, email, password, phone, address, dob, gender) VALUES (?, ?, ?, ?, ?, ?, ?);`;
   const queryDatabase = query => new Promise((resolve, reject) => {
     db.query(query, [
