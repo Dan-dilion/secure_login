@@ -2,16 +2,21 @@ import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
+    padding: '1.5rem'
     // margin: '1rem'
   },
   textArea: {
+  },
+  warning: {
+    color: '#f73030',
+    fontWeight: '800'
   },
   paragraphs: {
     [theme.breakpoints.down('sm')]: {
       fontSize: '0.8rem'
     },
     [theme.breakpoints.up('sm')]: {
-      fontSize: '1.5rem'
+      fontSize: '1.2rem'
     },
     marginBottom: '.75em'
   },
@@ -22,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   },
   listBoxes: {
     width: '50%',
-    minWidth: '20rem'
+    minWidth: '20em'
   },
   lists: {
     borderRadius: '10px',
@@ -31,7 +36,13 @@ const useStyles = makeStyles(theme => ({
     width: '80%'
   },
   listItem: {
-    padding: 0
+    padding: 0,
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '0.8rem'
+    },
+    [theme.breakpoints.up('sm')]: {
+      fontSize: '1.2rem'
+    }
   }
 }));
 

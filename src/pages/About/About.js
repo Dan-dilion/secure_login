@@ -19,48 +19,57 @@ const ListItemLink = (props) => {
 const About = (props) => {
   // De-structure logic
   const {
-    classes
+    classes,
+    isSmall
   } = AboutLogic(props);
 
   return (
     <Container className={classes.root}>
-      <Typography className={classes.title} variant="h1">About</Typography>
+      <Typography className={classes.title} variant={isSmall ? 'h2' : 'h1'}>About</Typography>
       <Container className={classes.textArea}>
-        <Typography className={classes.paragraphs}>
-          This site is for demonstration purposes only. It has a minimal
-          front-end design and implements a Json Web Token exchange security
-          system.
-        </Typography>
-        <Typography className={classes.paragraphs}>
-          When the user logs in the server generates a unique token with which
-          the client must use for further transactions with the server.
-        </Typography>
-        <Typography className={classes.paragraphs}>
-          When access to the private page is requested the server is contacted
-          and asked to verify the current session/token. If the token is invalid
-          or has expired then access is denied.
-        </Typography>
-        <Typography className={classes.paragraphs}>
-          While it would be fairly remedial for a hacker to access the style and
-          layout of the private page the table of user data is not accessible
-          without a valid Json Web Token.
-        </Typography>
-        <Typography className={classes.paragraphs}>
+        <Typography className={`${classes.paragraphs} ${classes.warning}`}>{`
+          This site is for demonstration purposes only, please don't enter any
+          valuable data in to it, you do not need a real email address to
+          sign up.
+        `}</Typography>
+        <Typography className={classes.paragraphs}>{`
+          JWT Secure Login System features a sophisticated server side form
+          validation system for registering new users ensuring that no
+          inappropriate data makes it's way in to the database.
+        `}</Typography>
+
+        <Typography className={classes.paragraphs}>{`
+          The Cryptographic password storage mechanism transfers login details
+          to the server with base64 encoded Basic Access Authorisation headers
+          which are then salted and hashed before storing in the database. This
+          ensures that the password can not be retrieved by anyone, only
+          compared and confirmed a match with future login details. Once the
+          password is stored in this way not even the user will be able to
+          retrieve it.
+        `}</Typography>
+
+        <Typography className={classes.paragraphs}>{`
+          The state of the art JSON web token is encrypted with the HS512
+          encryption algorithm which can only be verified by the server ensuring
+          the client is who it's meant to be.
+        `}</Typography>
+
+        <Typography className={classes.paragraphs}>{`
           This demo uses the following libraries:
-        </Typography>
+        `}</Typography>
 
         <div className={classes.listBox}>
           <div className={classes.listBoxes}>
-            <Typography variant="h3">Client-side</Typography>
+            <Typography variant={isSmall ? 'h4' : 'h3'}>Client-side</Typography>
             <List className={classes.lists} component="nav">
               <ListItemLink href="https://create-react-app.dev/" divider={true}>
-                <Typography className={classes.text} variant="h5">
+                <Typography className={classes.listItem}>
                   Create-React-App
                 </Typography>
               </ListItemLink>
 
               <ListItemLink href="https://reactjs.org/" divider={true}>
-                <Typography className={classes.text} variant="h5">
+                <Typography className={classes.listItem}>
                   React
                 </Typography>
               </ListItemLink>
@@ -69,13 +78,13 @@ const About = (props) => {
                 href="https://www.npmjs.com/package/@reduxjs/toolkit"
                 divider={true}
               >
-                <Typography className={classes.text} variant="h5">
+                <Typography className={classes.listItem}>
                   Redux Toolkit
                 </Typography>
               </ListItemLink>
 
               <ListItemLink href="https://mui.com/" divider={true}>
-                <Typography className={classes.text} variant="h5">
+                <Typography className={classes.listItem}>
                   Material-UI
                 </Typography>
               </ListItemLink>
@@ -84,7 +93,7 @@ const About = (props) => {
                 href="https://www.npmjs.com/package/notistack"
                 divider={true}
               >
-                <Typography className={classes.text} variant="h5">
+                <Typography className={classes.listItem}>
                   notistack
                 </Typography>
               </ListItemLink>
@@ -93,7 +102,7 @@ const About = (props) => {
                 href="https://www.npmjs.com/package/react-spinners"
                 divider={true}
               >
-                <Typography className={classes.text} variant="h5">
+                <Typography className={classes.listItem}>
                   react-spinners
                 </Typography>
               </ListItemLink>
@@ -102,7 +111,7 @@ const About = (props) => {
                 href="https://www.npmjs.com/search?q=date-io"
                 divider={true}
               >
-                <Typography className={classes.text} variant="h5">
+                <Typography className={classes.listItem}>
                   date-io
                 </Typography>
               </ListItemLink>
@@ -111,7 +120,7 @@ const About = (props) => {
                 href="https://www.npmjs.com/package/bcryptjs"
                 divider={true}
               >
-                <Typography className={classes.text} variant="h5">
+                <Typography className={classes.listItem}>
                   bcryptjs
                 </Typography>
               </ListItemLink>
@@ -120,7 +129,7 @@ const About = (props) => {
                 href="https://www.npmjs.com/package/owasp-password-strength-test"
                 divider={true}
               >
-                <Typography className={classes.text} variant="h5">
+                <Typography className={classes.listItem}>
                   owasp-password-strength-test
                 </Typography>
               </ListItemLink>
@@ -128,22 +137,22 @@ const About = (props) => {
           </div>
 
           <div className={classes.listBoxes}>
-            <Typography variant="h3">Server-side</Typography>
+            <Typography variant={isSmall ? 'h4' : 'h3'}>Server-side</Typography>
             <List className={classes.lists} component="nav">
               <ListItemLink href="https://www.npmjs.com/package/express" divider={true}>
-                <Typography className={classes.text} variant="h5">
+                <Typography className={classes.listItem}>
                   express
                 </Typography>
               </ListItemLink>
 
               <ListItemLink href="https://www.npmjs.com/package/jsonwebtoken" divider={true}>
-                <Typography className={classes.text} variant="h5">
+                <Typography className={classes.text}>
                   jsonwebtoken
                 </Typography>
               </ListItemLink>
 
               <ListItemLink href="https://www.npmjs.com/package/mysql" divider={true}>
-                <Typography className={classes.text} variant="h5">
+                <Typography className={classes.listItem}>
                   mysql
                 </Typography>
               </ListItemLink>
@@ -152,7 +161,7 @@ const About = (props) => {
                 href="https://www.npmjs.com/package/bcryptjs"
                 divider={true}
               >
-                <Typography className={classes.text} variant="h5">
+                <Typography className={classes.listItem}>
                   bcryptjs
                 </Typography>
               </ListItemLink>
@@ -161,7 +170,7 @@ const About = (props) => {
                 href="https://www.npmjs.com/package/owasp-password-strength-test"
                 divider={true}
               >
-                <Typography className={classes.text} variant="h5">
+                <Typography className={classes.listItem}>
                   owasp-password-strength-test
                 </Typography>
               </ListItemLink>
@@ -170,7 +179,7 @@ const About = (props) => {
                 href="https://www.npmjs.com/package/cors"
                 divider={true}
               >
-                <Typography className={classes.text} variant="h5">
+                <Typography className={classes.listItem}>
                   cors
                 </Typography>
               </ListItemLink>

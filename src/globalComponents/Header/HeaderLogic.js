@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSnackbar } from 'notistack';
-import { Slide } from '@material-ui/core';
+import { Slide, useMediaQuery, useTheme } from '@material-ui/core';
 
 import { signOut, deleteUser } from '../../server_requests/securityRequests.js';
 import { setHeaderUnderline } from '../../App/AppSlice.js';
@@ -19,6 +19,9 @@ const HeaderLogic = () => {
   const headerSelection = useSelector(state => state.app.headerSelection);
   const [anchorEl, setAnchorEl] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down(theme.breakpoints.values.sm), { noSsr: true });
+
 
   const userMenuOptions = [
     'Logout',
@@ -92,7 +95,8 @@ const HeaderLogic = () => {
     userName,
     headerSelection,
     userMenuOptions,
-    handleUserMenuSelect
+    handleUserMenuSelect,
+    isSmall
   };
 };
 

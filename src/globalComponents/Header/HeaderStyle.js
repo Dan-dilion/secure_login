@@ -16,21 +16,74 @@ const useStyles = makeStyles(theme => ({
     flexWrap: 'wrap',
     justifyContent: 'space-between'
   },
-  titleStyle: {
+  titleAndTabsContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    width: '100%'
+  },
+  titleContainer: {
     display: 'flex',
     alignItems: 'center',
     padding: '5px',
-    margin: 0
+    margin: 0,
+    [theme.breakpoints.down('sm')]: {
+      width: '100%'
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: '55%'
+    }
+  },
+  titleStyle: {
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '1.3rem',
+      margin: '0 auto'
+    },
+    [theme.breakpoints.between('sm', 'md')]: {
+      fontSize: '1.1rem'
+    },
+    [theme.breakpoints.between('md', 'lg')]: {
+      fontSize: '2rem'
+    },
+    [theme.breakpoints.up('lg')]: {
+      fontSize: '2.5rem'
+    }
+  },
+  tabsContainer: {
+    display: 'flex',
+    justifyContent: 'end',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+      justifyContent: 'center'
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: '45%',
+      justifyContent: 'end'
+    }
   },
   tab: {
     [theme.breakpoints.down('sm')]: {
       fontSize: '.8rem',
       minWidth: '6rem'
     },
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.between('sm', 'md')]: {
+      fontSize: '.7rem',
+      minWidth: '4rem'
+    },
+    [theme.breakpoints.between('md', 'lg')]: {
+      fontSize: '.8rem',
+      minWidth: '7rem'
+    },
+    [theme.breakpoints.up('lg')]: {
       fontSize: '1.2rem',
       minWidth: '10rem'
     }
+  },
+  buttonsAndMenu: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingTop: '.5rem'
   },
   buttonContainer: {
     maxWidth: '16em',
