@@ -64,8 +64,8 @@ echo "Please enter the user name for your MySql server: "
   then
     echo
     echo "Running the following query now..."
-    echo "CREATE DATABASE IF NOT EXISTS ${database};"
-    mysql -u$user -p$password -e "CREATE DATABASE IF NOT EXISTS ${database};"
+    echo "CREATE DATABASE ${database};"
+    mysql -u$user -p$password -e "CREATE DATABASE ${database};"
     echo
     if [ $? -gt 0 ]
     then

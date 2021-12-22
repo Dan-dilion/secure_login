@@ -1,44 +1,59 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+# **<u>JWT Secure Login System</u>**
+a demonstration of server-side authentication
 
-## Available Scripts
+### [Click Here](http://www.waxworlds.org/dan/secure_login/) to see the project
 
-In the project directory, you can run:
+Hello,
+This project was created with Create React App using the Redux and Redux Toolkit
+template.
 
-### `yarn start`
+Aside from the packages installed by Create React App below is a summary of NPM
+packages that I have used:
+  - Material-UI
+  - bcryptjs
+  - owasp-password-strength-test
+  - date-io
+  - react-spinners
+  - notistack
+  - express
+  - jasonwebtoken
+  - mysql
+  - cors
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# To download and run this project: [^1]
+  1. Clone master branch of GitHub repository to local folder
+  2. To set up your database and generate a dbconfig.json file navigate to the
+     the server directory in your terminal and run the script setupserver.sh,
+     Follow the on-screen instructions
+  3. Back in the projects root directory use Node Package Manager to install
+     all dependencies, type the following:
+    `npm install`
+  4. To run the project enter:
+    `npm run start`
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+The project should open up automatically in your default browser
 
-### `yarn test`
+# To deploy to web server: [^2]
+  1. Follow the above instructions to install the project
+  2. If you intend to deploy to a subdirectory on your web server edit file
+  	  `/package.json` and change the `homepage` value (the first entry)
+     to the subdirectory that you are deploying to. For example if you are
+     deploying to http://yourServer.com/subdirectory/secure_login/
+     change the `homepage` value to `/subdirectory/secure_login`
+  3. Run the following command:
+     `npm run build`
+  4. Copy the contents of the newly created `/build` directory to the
+     deployment directory on your server
+  5. Now copy the contents of `/server` over to your web server (you can rename it if you like) [^3]
+  6. Finally in the `server` directory run the bash script `setupserver.sh` and follow the
+     instructions. Running the `setupserver.sh` script will perform the following actions:
+     - Ask you for your database config details (username, password, database name etc)
+     - Generate a dbconfig.json file
+     - Offer to create a new database
+     - Offer to create a new users table in the database
+     - Offer to install the servers dependancies (runs `npm install`)
+     - Offer to start the server (runs `node mainServer.js`)
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+[^1]: To run this project you will need to be running a [MySQL server](https://dev.mysql.com/downloads/mysql/)
+[^2]: To deploy this project you will need shell access to a web server that has a MySQL server running and NodeJS installed
+[^3]: It's bad practise to have the server directory inside the hosting directory although there is a `.htaccess` file in the server directory that will prevent access to your database login details it is still ==strongly recommended== not to do this!
