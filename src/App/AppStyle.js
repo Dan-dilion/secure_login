@@ -2,9 +2,15 @@ const AppStyle = theme => ({
   root: {
     // border: '2px solid red',
     padding: 0,
-    width: '80%',
-    borderRadius: '10px'
-
+    borderRadius: '10px',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+      marginBottom: 0
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: '80%',
+      marginBottom: '2rem'
+    }
   },
   pageArea: {
     // border: '2px solid green',
