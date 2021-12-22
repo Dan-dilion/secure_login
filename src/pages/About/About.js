@@ -28,30 +28,30 @@ const About = (props) => {
       <Typography className={classes.title} variant={isSmall ? 'h2' : 'h1'}>About</Typography>
       <Container className={classes.textArea}>
         <Typography className={`${classes.paragraphs} ${classes.warning}`}>{`
-          This site is for demonstration purposes only, please don't enter any
-          valuable data in to it, you do not need a real email address to
+          This site is for demonstration purposes only. Please don't enter any
+          valuable data - you do not need a real email address to
           sign up.
         `}</Typography>
         <Typography className={classes.paragraphs}>{`
           JWT Secure Login System features a sophisticated server side form
-          validation system for registering new users ensuring that no
-          inappropriate data makes it's way in to the database.
+          validation system for registering new users, ensuring that no
+          inappropriate data makes its way into the database.
         `}</Typography>
 
         <Typography className={classes.paragraphs}>{`
-          The Cryptographic password storage mechanism transfers login details
-          to the server with base64 encoded Basic Access Authorisation headers
-          which are then salted and hashed before storing in the database. This
-          ensures that the password can not be retrieved by anyone, only
+          The cryptographic password storage mechanism transfers login details
+          to the server with base64 encoded Basic Access Authorisation headers,
+          which are then salted and hashed before being stored in the database.
+          This ensures that the password cannot be retrieved by anyone, only
           compared and confirmed a match with future login details. Once the
           password is stored in this way not even the user will be able to
-          retrieve it.
+          retrieve it in its unencrypted form.
         `}</Typography>
 
         <Typography className={classes.paragraphs}>{`
           The state of the art JSON web token is encrypted with the HS512
-          encryption algorithm which can only be verified by the server ensuring
-          the client is who it's meant to be.
+          encryption algorithm, which can only be verified by the server ensuring
+          the client session is always the same session that logged in.
         `}</Typography>
 
         <Typography className={classes.paragraphs}>{`
@@ -64,7 +64,7 @@ const About = (props) => {
             <List className={classes.lists} component="nav">
               <ListItemLink href="https://create-react-app.dev/" divider={true}>
                 <Typography className={classes.listItem}>
-                  Create-React-App
+                  Create React App
                 </Typography>
               </ListItemLink>
 
@@ -94,7 +94,7 @@ const About = (props) => {
                 divider={true}
               >
                 <Typography className={classes.listItem}>
-                  notistack
+                  Notistack
                 </Typography>
               </ListItemLink>
 
@@ -103,7 +103,7 @@ const About = (props) => {
                 divider={true}
               >
                 <Typography className={classes.listItem}>
-                  react-spinners
+                  React-Spinners
                 </Typography>
               </ListItemLink>
 
@@ -112,7 +112,7 @@ const About = (props) => {
                 divider={true}
               >
                 <Typography className={classes.listItem}>
-                  date-io
+                  Date-io
                 </Typography>
               </ListItemLink>
 
@@ -121,7 +121,7 @@ const About = (props) => {
                 divider={true}
               >
                 <Typography className={classes.listItem}>
-                  bcryptjs
+                  Bcryptjs
                 </Typography>
               </ListItemLink>
 
@@ -130,7 +130,7 @@ const About = (props) => {
                 divider={true}
               >
                 <Typography className={classes.listItem}>
-                  owasp-password-strength-test
+                  OWASP-Password-Strength-Test
                 </Typography>
               </ListItemLink>
             </List>
@@ -146,7 +146,7 @@ const About = (props) => {
               </ListItemLink>
 
               <ListItemLink href="https://www.npmjs.com/package/jsonwebtoken" divider={true}>
-                <Typography className={classes.text}>
+                <Typography className={classes.listItem}>
                   jsonwebtoken
                 </Typography>
               </ListItemLink>
