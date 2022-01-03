@@ -1,10 +1,11 @@
 const owasp = require('owasp-password-strength-test');
 const bcrypt = require('bcryptjs');
 
-const db = require('./config/dbConfig.js');
+const connectionPool = require('./config/dbConfig.js');
+// const db = {};
 
-const prefix = db.customOptions.prefix;
-const database = db.config.database;
+const prefix = connectionPool.customOptions.prefix;
+const database = connectionPool.config.connectionConfig.database;
 
 
 /**
@@ -303,9 +304,24 @@ const checkLoginDetails = async (emailAddress, password) => {
   const statement = `SELECT * FROM ${database}.${prefix}users WHERE email = ?;`;
 
   const queryDatabase = query => new Promise((resolve, reject) => {
-    db.query(query, [emailAddress], (err, result, fields) => {
-      if (err) reject(new Error('DB query failed: ' + err.code + ': ' + err.sqlMessage));
-      else resolve(result);
+    connectionPool.getConnection((err, connection) => {
+      if (err) {
+        console.log('DB connection failed: ', err);
+        reject(new Error('DB connection failed: ' + err));
+      }
+
+      connection.query(query, [emailAddress], (err, result, fields) => {
+        if (err) {
+          console.log('DB query failed: ', err);
+          reject(new Error('DB query failed: ' + err.code + ': ' + err.sqlMessage));
+        } else resolve(result);
+      });
+
+      connection.release();
+      if (err) {
+        console.log('DB connection release error: ', err);
+        reject(new Error('DB connection release error: ' + err));
+      }
     });
   });
 
@@ -326,7 +342,20 @@ const checkLoginDetails = async (emailAddress, password) => {
  */
 
 const setLastLoggedInTime = id => {
-  db.query(`UPDATE ${database}.${prefix}users SET datelastlogin = now() WHERE id = '${id}'`);
+  try {
+    connectionPool.getConnection((err, connection) => {
+      if (err) throw new Error('DB connection failed: ' + err);
+
+      connection.query(`UPDATE ${database}.${prefix}users SET datelastlogin = now() WHERE id = '${id}'`, (err, result, fields) => {
+        if (err) throw new Error('DB query error - failed to set datelastlogin: ' + err.code + ': ' + err.sqlMessage);
+      });
+
+      connection.release();
+      if (err) throw new Error('DB connection release error: ' + err);
+    });
+  } catch (err) {
+    console.log('An error occurred while attempting to update datelastlogin: ', err);
+  }
 };
 
 
@@ -340,9 +369,24 @@ const checkEmailExists = email => {
   const checkEmailQuery = `SELECT * FROM ${database}.${prefix}users WHERE email = ?`;
 
   const queryDatabase = query => new Promise((resolve, reject) => {
-    db.query(query, [email], (err, result, fields) => {
-      if (err) reject(new Error('DB query failed: ' + err.code + ': ' + err.sqlMessage));
-      else resolve(result);
+    connectionPool.getConnection((err, connection) => {
+      if (err) {
+        console.log('DB connection failed: ', err);
+        reject(new Error('DB connection failed: ' + err));
+      }
+
+      connection.query(query, [email], (err, result, fields) => {
+        if (err) {
+          console.log('DB query failed: ', err);
+          reject(new Error('DB query failed: ' + err.code + ': ' + err.sqlMessage));
+        } else resolve(result);
+      });
+
+      connection.release();
+      if (err) {
+        console.log('DB connection release error: ', err);
+        reject(new Error('DB connection release error: ' + err));
+      }
     });
   });
 
@@ -363,13 +407,29 @@ const deleteUser = (userId) => {
   const statement = `DELETE FROM ${database}.${prefix}users WHERE id = ?;`;
 
   const queryDatabase = query => new Promise((resolve, reject) => {
-    db.query(query, [userId], (err, result, fields) => {
-      err
-        ? reject(new Error(`DB query failed - ${err.code}: ${err.sqlMessage}`))
-        : result.affectedRows < 1
-          ? reject(new Error('DB Error - No affected rows!'))
-          : resolve(result);
+    connectionPool.getConnection((err, connection) => {
+      if (err) {
+        console.log('DB connection failed: ', err);
+        reject(new Error('DB connection failed: ' + err));
+      }
+
+      connection.query(query, [userId], (err, result, fields) => {
+        if (err) {
+          console.log(`Attempting to delete user ${userId} - DB query failed: `, err);
+          reject(new Error(`DB query failed - ${err.code}: ${err.sqlMessage}`));
+        } else if (result.affectedRows < 1) {
+          console.log(`Attempting to delete user ${userId} - DB Error - No affected rows!`);
+          reject(new Error('DB Error - No affected rows!'));
+        } else resolve(result);
+      });
+
+      connection.release();
+      if (err) {
+        console.log('DB connection release error: ', err);
+        reject(new Error('DB connection release error: ' + err));
+      }
     });
+
   });
 
   return queryDatabase(statement)
@@ -387,11 +447,27 @@ const getUserDetails = () => {
   const statement = `SELECT id, username, email, password, phone, address, dob, gender, datecreated, datelastlogin FROM ${database}.${prefix}users`;
 
   const queryDatabase = query => new Promise((resolve, reject) => {
-    db.query(query, (err, result, fields) => {
-      err
-        ? reject(new Error('DB query failed - ' + err.code + ': ' + err.sqlMessage))
-        : resolve(result);
+
+    connectionPool.getConnection((err, connection) => {
+      if (err) {
+        console.log('DB connection failed: ', err);
+        reject(new Error('DB connection failed: ' + err));
+      }
+
+      connection.query(query, (err, result, fields) => {
+        if (err) {
+          console.log('DB query failed - ', err);
+          reject(new Error('DB query failed - ' + err.code + ': ' + err.sqlMessage));
+        } else resolve(result);
+      });
+
+      connection.release();
+      if (err) {
+        console.log('DB connection release error: ', err);
+        reject(new Error('DB connection release error: ' + err));
+      }
     });
+
   });
 
   return queryDatabase(statement)
@@ -406,20 +482,36 @@ const getUserDetails = () => {
 
 const addNewUser = (details) => {
   const statement = `INSERT INTO ${database}.${prefix}users(username, email, password, phone, address, dob, gender) VALUES (?, ?, ?, ?, ?, ?, ?);`;
+
   const queryDatabase = query => new Promise((resolve, reject) => {
-    db.query(query, [
-      details.username.value,
-      details.email.value,
-      details.password1.hash,
-      details.phone.value ? details.phone.value : null,
-      details.address.value ? details.address.value : null,
-      details.dob.value ? details.dob.value : null,
-      details.gender.value ? details.gender.value : null
-    ], (err, result, fields) => {
-      err
-        ? reject(new Error(`DB error!: ${err.code}: ${err.sqlMessage}`))
-        : resolve(result);
+    connectionPool.getConnection((err, connection) => {
+      if (err) {
+        console.log('DB connection failed: ', err);
+        reject(new Error('DB connection failed: ' + err));
+      }
+
+      connection.query(query, [
+        details.username.value,
+        details.email.value,
+        details.password1.hash,
+        details.phone.value ? details.phone.value : null,
+        details.address.value ? details.address.value : null,
+        details.dob.value ? details.dob.value : null,
+        details.gender.value ? details.gender.value : null
+      ], (err, result, fields) => {
+        if (err) {
+          console.log('DB query error!: ', err);
+          reject(new Error(`DB query error!: ${err.code}: ${err.sqlMessage}`));
+        } else resolve(result);
+      });
+
+      connection.release();
+      if (err) {
+        console.log('DB connection release error: ', err);
+        reject(new Error('DB connection release error: ' + err));
+      }
     });
+
   });
 
   return queryDatabase(statement)
