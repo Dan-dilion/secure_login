@@ -16,18 +16,25 @@ const Home = (props) => {
       <Typography className={classes.title} variant={isSmall ? 'h2' : 'h1'}>Welcome</Typography>
       <Container>
         <Typography className={classes.paragraphs}>
-          Download the source code for JWT Secure Login System <a href="">here</a>.
-          There you will also find deployment instructions.
+          Download the source code for JWT Secure Login
+          System <a
+            href="https://github.com/Dan-dilion/secure_login"
+            target="_blank"
+            rel="noopener noreferrer"
+          >here</a> where you will also find deployment instructions.
         </Typography>
         <Typography className={classes.paragraphs}>
-          The project comes bundled with a bash script to set up your database.
+          The project comes bundled with a bash script to set up your MySQL
+          database, just follow the instructions on the above link or view the
+          README.md file after cloning
         </Typography>
 
         <div className={classes.textAndDiagramContainer}>
           <div className={classes.textArea}>
             <Typography className={classes.paragraphs}>{`
               This demo has a minimal front-end design and implements a JSON Web
-              Token security system.
+              Token security system. It is intended to be hosted from an SSL
+              encrypted server (HTTPS) to prevent man-in-the-middle attacks.
             `}</Typography>
             <Typography className={classes.paragraphs}>{`
               When the user logs in, the server generates a unique token, which

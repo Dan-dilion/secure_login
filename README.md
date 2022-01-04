@@ -54,5 +54,5 @@ The project should open up automatically in your default browser
      - Offer to start the server (runs `node mainServer.js`)
 
 [^1]: To run this project you will need to be running a [MySQL server](https://dev.mysql.com/downloads/mysql/)
-[^2]: To deploy this project you will need shell access to a web server that has a MySQL server running and NodeJS installed
+[^2]: To deploy this project you will need shell access to an Apache server that is hosting a MySQL database and has NodeJS installed
 [^3]: It's bad practice to have the server directory inside the hosting directory. Although there is a `.htaccess` file in the server directory that will prevent access to your database login details, it is still strongly recommended not to do this!

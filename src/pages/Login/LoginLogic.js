@@ -5,6 +5,7 @@ import { useSnackbar } from 'notistack';
 import { Slide } from '@material-ui/core';
 
 import { setLoginModalVisible } from '../../App/AppSlice.js';
+import { resetRegisterForm } from '../Register/registerSlice.js';
 import { setLoggedIn, setLoginForm } from './loginSlice.js';
 import { requestLogin } from '../../server_requests/securityRequests.js';
 
@@ -52,6 +53,7 @@ const LoginLogic = () => {
         TransitionComponent: Slide
       });
       dispatch(setLoginModalVisible(false));
+      dispatch(resetRegisterForm());
       navigate(state.path || '/Body');
     } else {
       enqueueSnackbar(results.message, {
