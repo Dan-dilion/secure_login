@@ -1,7 +1,9 @@
 const express = require('express');
 
 const jwtUtils = require('./jwtUtils.js');
-const databaseUtils = require('./databaseUtils.js');
+const databaseAccess = require('./databaseAccess.js');
+const formValidation = require('./formValidation.js');
+const serverUtils = require('./serverUtils.js');
 
 const router = express.Router();
 
@@ -38,7 +40,7 @@ router.post('/verify_user/', jwtUtils.verifyLogin, (request, response, next) => 
  *  Query Database - Secure
  */
 router.post('/get_user_details/', jwtUtils.verifyLogin, (request, response, next) => {
-  databaseUtils.getUserDetails().then(result => {
+  databaseAccess.getUserDetails().then(result => {
     response.set({ 'Content-Type': 'application/json' });                       // Response to be JSON format
     response.send(JSON.stringify(result));
   });
@@ -52,7 +54,7 @@ router.post('/get_user_details/', jwtUtils.verifyLogin, (request, response, next
  */
 
 router.post('/check_email/', (request, response, next) => {
-  databaseUtils.checkEmailExists(request.body.email).then(result => {
+  databaseAccess.checkEmailExists(request.body.email).then(result => {
     response.set({ 'Content-Type': 'application/json' });                       // Response to be JSON format
     response.send(JSON.stringify(result));
   });
@@ -78,7 +80,7 @@ router.post('/login/', async (request, response, next) => {
   const resolveLogin = verifiedObject => {
     const token = jwtUtils.generateNewToken(verifiedObject.result[0].username, verifiedObject.result[0].id);
 
-    databaseUtils.setLastLoggedInTime(verifiedObject.result[0].id);
+    databaseAccess.setLastLoggedInTime(verifiedObject.result[0].id);
 
     response.send(JSON.stringify({
       verified: true,
@@ -96,7 +98,7 @@ router.post('/login/', async (request, response, next) => {
     }));
   };
 
-  await databaseUtils.checkLoginDetails(emailAddress, password)
+  await databaseAccess.checkLoginDetails(emailAddress, password)
     .then(verifiedObject => {
       verifiedObject.success ? resolveLogin(verifiedObject) : rejectLogin(verifiedObject);
     });
@@ -111,10 +113,10 @@ router.post('/login/', async (request, response, next) => {
 
 router.post('/register_new_user/', async (request, response, next) => {
 
-  const verifiedUserDetailsObject = await databaseUtils.validateUserDetails(request.body.userDetails);
+  const verifiedUserDetailsObject = await formValidation.validateUserDetails(request.body.userDetails);
   if (verifiedUserDetailsObject.okayToSubmit) {
-    verifiedUserDetailsObject.newUserDetails.password1.hash = await databaseUtils.hashPassword(verifiedUserDetailsObject.newUserDetails.password1.value);
-    databaseUtils.addNewUser(verifiedUserDetailsObject.newUserDetails)
+    verifiedUserDetailsObject.newUserDetails.password1.hash = await serverUtils.hashPassword(verifiedUserDetailsObject.newUserDetails.password1.value);
+    databaseAccess.addNewUser(verifiedUserDetailsObject.newUserDetails)
       .then(outcome => {
         if (outcome.err) {
           response.set({ 'Content-Type': 'application/json' });                          // Response to be JSON format
@@ -150,7 +152,7 @@ router.post('/register_new_user/', async (request, response, next) => {
  */
 
 router.post('/delete_user/', jwtUtils.verifyLogin, (request, response, next) => {
-  databaseUtils.deleteUser(request.body.userId).then(result => {
+  databaseAccess.deleteUser(request.body.userId).then(result => {
     response.set({ 'Content-Type': 'application/json' });
     response.send(JSON.stringify(result));
   });
