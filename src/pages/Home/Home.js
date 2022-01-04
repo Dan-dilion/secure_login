@@ -26,7 +26,7 @@ const Home = (props) => {
         <Typography className={classes.paragraphs}>
           The project comes bundled with a bash script to set up your MySQL
           database, just follow the instructions on the above link or view the
-          README.md file after cloning
+          README.md file after cloning.
         </Typography>
 
         <div className={classes.textAndDiagramContainer}>

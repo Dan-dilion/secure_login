@@ -24,17 +24,8 @@ const Body = props => {
 
   return (
     <Container className={classes.root}>
-        <Typography className={classes.message} variant="h4">
-          This page is secure.
-        </Typography>
-        <Typography className={classes.message}>
-          While a hacker could access the style and layout of this page fairly
-          easily the information on it is retrieved from a database and is only
-          available if the current session has a valid Json Web Token (JWT).
-        </Typography>
-
-        <Typography variant="h6">
-          Here is the current JWT:
+        <Typography variant="h4">
+          This is your current JWT:
         </Typography>
 
         <Card

@@ -28,7 +28,7 @@ const About = (props) => {
       <Typography className={classes.title} variant={isSmall ? 'h2' : 'h1'}>About</Typography>
       <Container className={classes.textArea}>
         <Typography className={`${classes.paragraphs} ${classes.warning}`}>{`
-          This site is for demonstration purposes only. Please don't enter any
+          This site is for demonstration purposes only. Please do not enter any
           valuable data - you do not need a real email address to
           sign up.
         `}</Typography>
@@ -43,15 +43,17 @@ const About = (props) => {
           to the server with base64 encoded Basic Access Authorisation headers,
           which are then salted and hashed before being stored in the database.
           This ensures that the password cannot be retrieved by anyone, only
-          compared and confirmed a match with future login details. Once the
+          verified and confirmed a match with future login attempts. Once the
           password is stored in this way not even the user will be able to
-          retrieve it in its unencrypted form.
+          retrieve it in its unencrypted form. If the password is forgotten it
+          must be deleted and replaced.
         `}</Typography>
 
         <Typography className={classes.paragraphs}>{`
-          The state of the art JSON web token is encrypted with the HS512
-          encryption algorithm, which can only be verified by the server ensuring
+          The JSON web token is encrypted with the HS512 encryption
+          algorithm, which can only be verified by the server, ensuring that
           the client session is always the same session that logged in.
+          The token is set to expire after one minute.
         `}</Typography>
 
         <Typography className={classes.paragraphs}>{`
